@@ -1,3 +1,6 @@
+import 'package:ecommerce_flutter/data/DataSource/Remote/Services/AuthService.dart';
+import 'package:ecommerce_flutter/domain/models/AuthResponse.dart';
+import 'package:ecommerce_flutter/domain/utils/Resource.dart';
 import 'package:ecommerce_flutter/presentation/pages/auth/login/LoginBlocState.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
@@ -5,12 +8,16 @@ import 'package:rxdart/rxdart.dart';
 class LoginBlocCubit extends Cubit<LoginBlocState> {
 
   LoginBlocCubit() : super(LoginInitial());
+
+  AuthService authService = AuthService();
   
   final _emailController = BehaviorSubject<String>();
   final _passwordController = BehaviorSubject<String>();
+  final _responseController = BehaviorSubject<Resource>();
 
   Stream<String> get emailStream => _emailController.stream;
   Stream<String> get passwordStream => _passwordController.stream;
+  Stream<Resource> get responseStream => _responseController.stream;
 
   void changeEmail(String email) {
     if (email.isNotEmpty && email.length < 6){
@@ -40,9 +47,16 @@ class LoginBlocCubit extends Cubit<LoginBlocState> {
     changePassword('');
   }
 
-  void login(){ //solo para corroborar que se llama y se captura los datos
+  void login() async{ //solo para corroborar que se llama y se captura los datos
+    _responseController.add(Loading());
+    
     print("Email: ${_emailController.value}");
     print("Password: ${_passwordController.value}");
+    //await Future.delayed(Duration(seconds: 4)); para verificar el circular progress indicator
+    Resource response = await authService.login(_emailController.value, _passwordController.value);
+    _responseController.add(response);
+
+    print ("Response: ${response}");
   }
 
 
