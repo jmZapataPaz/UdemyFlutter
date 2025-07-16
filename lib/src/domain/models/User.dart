@@ -6,7 +6,7 @@ class User {
     int? id;
     String name;
     String lastname;
-    String email;
+    String? email;
     String? password;
     String phone;
     String? image;
@@ -18,7 +18,7 @@ class User {
         this.id,
         required this.name,
         required this.lastname,
-        required this.email,
+        this.email,
         this.password,
         required this.phone,
         this.image,

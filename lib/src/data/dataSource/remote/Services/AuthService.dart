@@ -21,7 +21,6 @@ class AuthService {
 
       final response = await http.post(url, headers: headers, body: body);
       
-      // AGREGAR VALIDACIÓN AQUÍ:
       if (response.body.isEmpty) {
         return Error<AuthResponse>('Respuesta vacía del servidor');
       }
@@ -38,9 +37,7 @@ class AuthService {
         return Success(authResponse);
       }
       else{
-        // VALIDAR QUE data['message'] EXISTE:
-        String errorMessage = data['message'] ?? 'Error desconocido';
-        return Error<AuthResponse>(errorMessage);
+        return Error(listToString(data['message']));
       }
 
     } catch (e) {
@@ -49,51 +46,49 @@ class AuthService {
     }
   }
 
-    Future<Resource<AuthResponse>> register (User user) async {
-  try{
-    Uri url = Uri.http(ApiConfig.API_ECOMMERCE,'/auth/register');
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-    String body = json.encode(user.toJson());
-    
-    print('URL: $url');
-    print('Body enviado: $body');
-    
-    final response = await http.post(url, headers: headers, body: body);
-    
-    print('Status Code: ${response.statusCode}');
-    print('Response Body: "${response.body}"');
-    print('Response Headers: ${response.headers}');
-    
-    if (response.body.isEmpty) {
-      return Error<AuthResponse>('Respuesta vacía del servidor');
-    }
-    
-    final data = json.decode(response.body);
-    
-    if (data == null) {
-      return Error<AuthResponse>('Respuesta inválida del servidor');
-    }
-    
-    if(response.statusCode == 200 || response.statusCode == 201){
-      // EL SERVIDOR DEVUELVE SOLO USER, NO AuthResponse
-      // Crear un AuthResponse artificial para mantener la compatibilidad
-      User registeredUser = User.fromJson(data);
-      AuthResponse authResponse = AuthResponse(
-        user: registeredUser,
-        token: '', // Token vacío para registro
-      );
-      return Success(authResponse);
-    }
-    else{
-      String errorMessage = data['message'] != null ? listToString(data['message']) : 'Error desconocido';
-      return Error<AuthResponse>(errorMessage);
-    }
+  Future<Resource<AuthResponse>> register (User user) async {
+    try{
+      Uri url = Uri.http(ApiConfig.API_ECOMMERCE,'/auth/register');
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+      };
+      String body = json.encode(user.toJson());
+      
+      print('URL: $url');
+      print('Body enviado: $body');
+      
+      final response = await http.post(url, headers: headers, body: body);
+      
+      print('Status Code: ${response.statusCode}');
+      print('Response Body: "${response.body}"');
+      print('Response Headers: ${response.headers}');
+      
+      if (response.body.isEmpty) {
+        return Error<AuthResponse>('Respuesta vacía del servidor');
+      }
+      
+      final data = json.decode(response.body);
+      
+      if (data == null) {
+        return Error<AuthResponse>('Respuesta inválida del servidor');
+      }
+      
+      if(response.statusCode == 200 || response.statusCode == 201){
+        User registeredUser = User.fromJson(data);
+        AuthResponse authResponse = AuthResponse(
+          user: registeredUser,
+          token: '', // Token vacío para registro
+        );
+        return Success(authResponse);
+      }
+      else{
+        String errorMessage = data['message'] != null ? listToString(data['message']) : 'Error desconocido';
+        return Error<AuthResponse>(errorMessage);
+      }
 
-  } catch (e) {
-    print('Error, $e');
-    return Error<AuthResponse>(e.toString());
+    } catch (e) {
+      print('Error, $e');
+      return Error<AuthResponse>(e.toString());
+    }
   }
-}
 }
