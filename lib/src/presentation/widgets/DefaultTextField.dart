@@ -9,6 +9,7 @@ class DefaultTextField extends StatelessWidget {
   Function (String text) onChanded;
   String? Function(String?)? validator;
   bool obscureText = false;
+  TextInputType? textInputType;
   
   DefaultTextField({
     Key? key,
@@ -20,6 +21,7 @@ class DefaultTextField extends StatelessWidget {
     this.validator,
     this.initialValue,
     this.color = Colors.white,
+    this.textInputType = TextInputType.text
   }): super(key: key);
 
 
@@ -31,6 +33,7 @@ class DefaultTextField extends StatelessWidget {
       onChanged: (text){
         onChanded(text);
       },
+      keyboardType: textInputType,
       validator: validator,
       decoration: InputDecoration(
         label: Text(label,

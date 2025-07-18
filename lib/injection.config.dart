@@ -13,17 +13,29 @@ import 'package:ecommerce_flutter/src/data/dataSource/local/sharedPref.dart'
     as _i882;
 import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/AuthService.dart'
     as _i493;
+import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/CategoryService.dart'
+    as _i251;
+import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/ProductService.dart'
+    as _i251;
 import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/UserService.dart'
     as _i380;
 import 'package:ecommerce_flutter/src/di/appModule.dart' as _i896;
 import 'package:ecommerce_flutter/src/domain/repository/authRepository.dart'
     as _i1040;
+import 'package:ecommerce_flutter/src/domain/repository/categoryRepository.dart'
+    as _i899;
+import 'package:ecommerce_flutter/src/domain/repository/productRepository.dart'
+    as _i88;
 import 'package:ecommerce_flutter/src/domain/repository/userRepository.dart'
     as _i242;
 import 'package:ecommerce_flutter/src/domain/useCases/auth/authUseCases.dart'
     as _i685;
 import 'package:ecommerce_flutter/src/domain/useCases/auth/loginUseCase.dart'
     as _i1009;
+import 'package:ecommerce_flutter/src/domain/useCases/categories/CategoryUseCase.dart'
+    as _i299;
+import 'package:ecommerce_flutter/src/domain/useCases/products/ProductUseCase.dart'
+    as _i191;
 import 'package:ecommerce_flutter/src/domain/useCases/user/UserUseCase.dart'
     as _i823;
 import 'package:get_it/get_it.dart' as _i174;
@@ -41,10 +53,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1040.AuthRepository>(() => appModule.authRepository);
     gh.factory<_i1009.LoginUseCase>(() => appModule.loginUseCase);
     gh.factory<_i882.SharedPref>(() => appModule.sharedPref);
+    gh.factoryAsync<String>(() => appModule.token);
     gh.factory<_i685.AuthUseCases>(() => appModule.authUseCases);
     gh.factory<_i380.UserService>(() => appModule.userService);
     gh.factory<_i242.UserRepository>(() => appModule.userRepository);
     gh.factory<_i823.UserUseCase>(() => appModule.userUseCase);
+    gh.factory<_i251.CategoryService>(() => appModule.categoryService);
+    gh.factory<_i899.CategoryRepository>(() => appModule.categoryRepository);
+    gh.factory<_i299.CategoryUseCase>(() => appModule.categoryUseCase);
+    gh.factory<_i251.ProductService>(() => appModule.productService);
+    gh.factory<_i88.ProductRepository>(() => appModule.productRepository);
+    gh.factory<_i191.ProductUseCase>(() => appModule.productUseCase);
     return this;
   }
 }

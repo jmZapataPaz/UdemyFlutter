@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:ecommerce_flutter/src/data/dataSource/local/sharedPref.dart';
-import 'package:ecommerce_flutter/src/domain/models/AuthResponse.dart';
 import 'package:ecommerce_flutter/src/domain/utils/ListToString.dart';
 import 'package:http/http.dart' as http;
 import 'package:ecommerce_flutter/src/data/api/ApiConfig.dart';
@@ -11,20 +9,15 @@ import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart';
 
 class UserService {
-  SharedPref sharedPref;
-  UserService(this.sharedPref);
+  Future<String> token;
+  UserService(this.token);
 
   Future<Resource<User>> update(int id, User user, File? image) async{
     try{
       Uri url = Uri.http(ApiConfig.API_ECOMMERCE, '/api/upload/$id');
-      String token = "";
-      final userSession = await sharedPref.read('user');
-      if(userSession != null){
-        AuthResponse authResponse = AuthResponse.fromJson(userSession);
-        token = authResponse.token ;
-      }
+      
       final request = http.MultipartRequest('PUT', url);
-      request.headers['Authorization'] = token;
+      request.headers['Authorization'] = await token;
       if (image != null) {
         request.files.add(http.MultipartFile(
           'file', 

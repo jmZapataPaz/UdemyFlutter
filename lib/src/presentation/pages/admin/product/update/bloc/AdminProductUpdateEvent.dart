@@ -1,0 +1,64 @@
+import 'package:ecommerce_flutter/src/domain/models/Product.dart';
+import 'package:ecommerce_flutter/src/domain/utils/BlocFormItem.dart';
+import 'package:equatable/equatable.dart';
+
+abstract class AdminProductUpdateEvent extends Equatable {
+  const AdminProductUpdateEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class AdminProductUpdateInitEvent extends AdminProductUpdateEvent {
+  final Product? product;
+
+  const AdminProductUpdateInitEvent({required this.product});
+  
+  @override
+  List<Object?> get props => [product];
+}
+
+class NameChanged extends AdminProductUpdateEvent {
+  final BlocFormItem name;
+  const NameChanged(this.name);
+  @override
+  List<Object?> get props => [name];
+}
+
+
+
+class DescriptionChanged extends AdminProductUpdateEvent {
+  final BlocFormItem description;
+  const DescriptionChanged(this.description);
+  @override
+  List<Object?> get props => [description];
+}
+
+class PriceChanged extends AdminProductUpdateEvent {
+  final BlocFormItem price;
+  const PriceChanged(this.price);
+  @override
+  List<Object?> get props => [price];
+}
+
+class FormSubmit extends AdminProductUpdateEvent {
+  const FormSubmit();
+  @override
+  List<Object?> get props => [];
+}
+
+class ResetForm extends AdminProductUpdateEvent {
+  const ResetForm();
+  @override
+  List<Object?> get props => [];
+}
+
+class PIckImage extends AdminProductUpdateEvent {
+  final int numberFile;
+  const PIckImage({required this.numberFile});
+}
+
+class TakePhoto extends AdminProductUpdateEvent {
+  final int numberFile;
+  const TakePhoto({required this.numberFile});
+}
