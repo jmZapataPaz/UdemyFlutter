@@ -24,6 +24,7 @@ class AdminProductUpdateBloc extends Bloc<AdminProductUpdateEvent, AdminProductU
   }
 
   final formKey = GlobalKey<FormState>();
+  final List<int> imagesToUpdate = <int>[];
   Future<void> _onInit(AdminProductUpdateInitEvent event, Emitter<AdminProductUpdateState> emit) async{
     emit(state.copyWith(
       id: event.product?.id,
@@ -73,30 +74,34 @@ class AdminProductUpdateBloc extends Bloc<AdminProductUpdateEvent, AdminProductU
   }
 
   Future<void> _onFormSubmit(FormSubmit event, Emitter<AdminProductUpdateState> emit) async{
+    imagesToUpdate.clear();
     emit(
       state.copyWith(
         response: Loading(),
         formKey: formKey
       )
     );
-    if(state.file1 != null && state.file2 != null){
-      List<File> files = [state.file1!, state.file2!];
-      Resource response = await productUseCase.createProductUseCase.run(state.toProduct(), files);
+    List<File> files = [];
+    if(state.file1 != null){
+      imagesToUpdate.add(0);
+      files.add(state.file1!);
+
+    }
+    if(state.file2 != null){
+      imagesToUpdate.add(1);
+      files.add(state.file2!);
+    }
+    Resource response = await productUseCase.updateProductUseCase.run(
+      state.id, state.toProduct(), 
+      files.isNotEmpty ? files :  null, 
+      imagesToUpdate.isNotEmpty ? imagesToUpdate : null
+    );
       emit(
         state.copyWith(
           response: response,
           formKey: formKey
         )
       );
-    }
-    else{
-      emit(
-        state.copyWith(
-          response: Error('Debes seleccionar dos imágenes'),
-          formKey: formKey
-        )
-      );
-    }
   }
 
   Future<void> _onResetForm(ResetForm event, Emitter<AdminProductUpdateState> emit)async {
@@ -112,12 +117,12 @@ class AdminProductUpdateBloc extends Bloc<AdminProductUpdateEvent, AdminProductU
     if (image != null) {
       if(event.numberFile == 1){
         emit(
-        state.copyWith(
-          file1: File(image.path),
-          formKey: formKey
+          state.copyWith(
+            file1: File(image.path),
+            formKey: formKey
           )
         );
-      }else if (event.numberFile ==2){
+      }else if (event.numberFile == 2){
         emit(
           state.copyWith(
             file2: File(image.path),
@@ -127,18 +132,19 @@ class AdminProductUpdateBloc extends Bloc<AdminProductUpdateEvent, AdminProductU
       }
     } 
   }
+
   Future<void> _onTakePhoto(TakePhoto event, Emitter<AdminProductUpdateState> emit) async {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.camera);
     if (image != null) {
       if(event.numberFile == 1){
         emit(
-        state.copyWith(
-          file1: File(image.path),
-          formKey: formKey
+          state.copyWith(
+            file1: File(image.path),
+            formKey: formKey
           )
         );
-      }else if (event.numberFile ==2){
+      }else if (event.numberFile == 2){
         emit(
           state.copyWith(
             file2: File(image.path),

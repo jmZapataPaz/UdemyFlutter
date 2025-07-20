@@ -1,16 +1,16 @@
 import 'package:ecommerce_flutter/src/domain/utils/Resource.dart';
 import 'package:equatable/equatable.dart';
 
-class AdminProductListState extends Equatable{
+class ClientProductListState extends Equatable{
 
   final Resource? response;
 
-  const AdminProductListState({this.response});
+  const ClientProductListState({this.response});
 
-  AdminProductListState copyWith({
+  ClientProductListState copyWith({
     Resource? response,
   }) {
-    return AdminProductListState(
+    return ClientProductListState(
       response: response
     );
   }

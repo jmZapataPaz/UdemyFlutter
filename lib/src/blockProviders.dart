@@ -2,19 +2,23 @@ import 'package:ecommerce_flutter/injection.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/auth/authUseCases.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/categories/CategoryUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/products/ProductUseCase.dart';
+import 'package:ecommerce_flutter/src/domain/useCases/shoppingBag/ShoppingBagUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/user/UserUseCase.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/category/create/bloc/AdminCategoryCreateBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/category/list/bloc/AdminCategoryListBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/category/update/bloc/AdminCategoryUpdateBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/home/bloc/AdminHomeBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/product/create/bloc/AdminProductCreateBloc.dart'; // Agregar import
-import 'package:ecommerce_flutter/src/presentation/pages/admin/product/create/bloc/AdminProductCreateEvent.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/product/list/bloc/AdminProductListBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/product/update/bloc/AdminProductUpdateBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/auth/login/bloc/LoginBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/auth/login/bloc/LoginEvent.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/auth/register/bloc/RegisterBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/auth/register/bloc/RegisterEvent.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/category/list/bloc/ClientCategoryListBloc.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/home/bloc/ClientHomeBloc.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/product/detail/bloc/ClientProductDetailBloc.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/product/list/bloc/ClientProductListBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/profile/info/bloc/ProfileInfoBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/profile/info/bloc/ProfileInfoEvent.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/profile/update/bloc/ProfileUpdateBloc.dart';
@@ -47,5 +51,13 @@ List<BlocProvider> blocProviders = [
     create: (context) => AdminProductListBloc(locator<ProductUseCase>())),
   BlocProvider<AdminProductUpdateBloc>(
   create: (context) => AdminProductUpdateBloc(locator<ProductUseCase>())),
+  BlocProvider<ClientHomeBloc>(
+    create: (context) => ClientHomeBloc(locator<AuthUseCases>())),
+  BlocProvider<ClientCategoryListBloc>(
+    create: (context) => ClientCategoryListBloc(locator<CategoryUseCase>())),
+  BlocProvider<ClientProductListBloc>(
+    create: (context) => ClientProductListBloc(locator<ProductUseCase>())),
+  BlocProvider<ClientProductDetailBloc>(
+    create: (context) => ClientProductDetailBloc(locator<ShoppingBagUseCases>())),
 
 ];

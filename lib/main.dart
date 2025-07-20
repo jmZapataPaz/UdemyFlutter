@@ -9,6 +9,8 @@ import 'package:ecommerce_flutter/src/presentation/pages/admin/product/update/Ad
 import 'package:ecommerce_flutter/src/presentation/pages/auth/login/LoginPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/auth/register/RegisterPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/home/ClientHomePage.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/product/detail/ClientProductDetailPage.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/product/list/ClientProductListPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/profile/info/ProfileInfoPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/profile/update/ProfileUpdatePage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/roles/RolesPage.dart';
@@ -31,7 +33,7 @@ class MainApp extends StatelessWidget {
       providers: blocProviders,
       child: MaterialApp(
         builder: FToastBuilder(),
-      debugShowCheckedModeBanner: false, // Disable the debug banner
+      debugShowCheckedModeBanner: false, 
       initialRoute: 'login',
       routes: {
         'login': (BuildContext context) => LoginPage(),
@@ -46,6 +48,8 @@ class MainApp extends StatelessWidget {
         'admin/product/update': (BuildContext context) => AdminProductUpdatePage(),
         'profile/info': (BuildContext context) => ProfileInfoPage(),
         'profile/update': (BuildContext context) => ProfileUpdatePage(),
+        'client/product/list': (BuildContext context) => ClientProductListPage(),
+        'client/product/detail': (BuildContext context) => ClientProductDetailPage(),
         
       },
     )

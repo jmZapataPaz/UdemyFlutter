@@ -3,8 +3,8 @@ import 'package:ecommerce_flutter/src/presentation/pages/admin/category/list/Adm
 import 'package:ecommerce_flutter/src/presentation/pages/admin/home/bloc/AdminHomeBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/home/bloc/AdminHomeEvent.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/home/bloc/AdminHomeState.dart';
-import 'package:ecommerce_flutter/src/presentation/pages/admin/product/list/AdminProductListPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/profile/info/ProfileInfoPage.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/roles/RolesPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,7 +20,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   AdminHomeBloc? _bloc;
   List<Widget> pageList = <Widget>[
     AdminCategoryListPage(),
-    AdminProductListPage(),
+    RolesPage(),
     ProfileInfoPage(),
   ];
 
@@ -59,7 +59,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   },
                 ),
                 ListTile(
-                  title: Text('Productos'),
+                  title: Text('Roles'),
                   selected: state.pageIndex == 1,
                   onTap: (){
                     _bloc?.add(AdminChangeDrawerPage(

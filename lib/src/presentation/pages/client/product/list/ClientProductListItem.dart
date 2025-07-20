@@ -1,22 +1,21 @@
 import 'package:ecommerce_flutter/src/domain/models/Product.dart';
-import 'package:ecommerce_flutter/src/presentation/pages/admin/product/list/bloc/AdminProductListBloc.dart';
-import 'package:ecommerce_flutter/src/presentation/pages/admin/product/list/bloc/AdminProductListEvent.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/product/list/bloc/ClientProductListBloc.dart';
 import 'package:flutter/material.dart';
 
-class AdminProductListItem extends StatelessWidget {
+class ClientProductListItem extends StatelessWidget {
 
   Product? product;
-  AdminProductListBloc? bloc;
-  AdminProductListItem(this.bloc, this.product);
+  ClientProductListBloc? bloc;
+  ClientProductListItem(this.bloc, this.product);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        //Navigator.pushNamed(context, 'admin/product/list', arguments: product);
+        Navigator.pushNamed(context, 'client/product/detail', arguments: product);
       },
       child: ListTile(
-        leading: product != null ? Container(
+        trailing: product != null ? Container(
           width: 70,
           child: product!.image1!.isNotEmpty ? FadeInImage.assetNetwork(
             placeholder: 'assets/img/user_image.png', 
@@ -26,7 +25,7 @@ class AdminProductListItem extends StatelessWidget {
           ): Container(),
         ):
         Container() ,
-        title: Text(product != null ? product!.name! : 'No Product', 
+        title: Text(product != null ? product!.name : 'No Product', 
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
@@ -40,21 +39,9 @@ class AdminProductListItem extends StatelessWidget {
               Text(product != null ? '\$${product!.price.toString()}' : 'No Price'),
           ],
         ),
-        trailing: Wrap(
+        leading: Wrap(
           direction: Axis.horizontal,
           children: [
-            IconButton(
-              onPressed: (){
-                Navigator.pushNamed(context, 'admin/product/update', arguments: product);
-              }, 
-              icon: Icon(Icons.edit, color: Colors.black)
-            ),
-            IconButton(
-              onPressed: (){
-                bloc?.add(DeleteProduct(id: product!.id!));
-              }, 
-              icon: Icon(Icons.delete, color: Colors.red)
-            ),
           ],
         ),
       ),

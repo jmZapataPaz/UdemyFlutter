@@ -16,6 +16,7 @@ class AdminProductUpdateState extends Equatable{
   final File? file1;
   final File? file2;
   final int id_category;
+  final List<int>? imagesToUpdate;
 
   const AdminProductUpdateState({
     this.id = 0,
@@ -27,6 +28,7 @@ class AdminProductUpdateState extends Equatable{
     this.id_category = 0,
     this.file1,
     this.file2,
+    this.imagesToUpdate,
   });
 
   toProduct() => Product(
@@ -55,6 +57,7 @@ class AdminProductUpdateState extends Equatable{
     Resource? response,
     File? file1,
     File? file2,
+    List<int>? imagesToUpdate,
   }) {
     return AdminProductUpdateState(
       id: id ?? this.id,
@@ -66,6 +69,7 @@ class AdminProductUpdateState extends Equatable{
       response: response,
       file1: file1 ?? this.file1,
       file2: file2 ?? this.file2,
+      imagesToUpdate: imagesToUpdate ?? this.imagesToUpdate
     );
   }
   @override

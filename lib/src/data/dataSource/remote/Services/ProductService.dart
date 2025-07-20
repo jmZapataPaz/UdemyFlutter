@@ -92,4 +92,82 @@ class ProductService{
     }
   }
 
+  Future<Resource<Product>> updateProductById(int id, Product product, List<File> files, List<int>? imagesToUpdate) async {
+    try {
+      Uri url = Uri.http(ApiConfig.API_ECOMMERCE, '/products/update/$id');
+      
+      final request = http.MultipartRequest('PUT', url);
+      request.headers['Authorization'] = await token;
+      
+      files.forEach((file) {
+        if (file != null) {
+          request.files.add(http.MultipartFile(
+            'files',
+            http.ByteStream(file.openRead().cast()),
+            file.lengthSync(),
+            filename: basename(file.path),
+            contentType: MediaType('image', 'jpg')
+          ));
+        }
+      });
+
+      request.fields['name'] = product.name;
+      request.fields['description'] = product.description;
+      request.fields['price'] = product.price.toString();
+      
+      if (imagesToUpdate != null && imagesToUpdate.isNotEmpty) {
+        request.fields['images_to_update'] = imagesToUpdate.join(',');
+      }
+
+      final response = await request.send();
+      final data = json.decode(await response.stream.transform(utf8.decoder).first);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Product updatedProduct = Product.fromJson(data);
+        return Success(updatedProduct);
+      } else {
+        return Error(listToString(data['message']));
+      }
+    } catch (e) {
+      print('Error al actualizar el producto: $e');
+      return Error(e.toString());
+    }
+  }
+
+  Future<Resource<bool>> deleteProduct(int id) async {
+    try {
+      Uri url = Uri.http(ApiConfig.API_ECOMMERCE, '/products/$id'); 
+
+      
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Authorization': await token
+      };
+      
+      print('Eliminando producto ID: $id');
+      print('URL: $url');
+      
+      final response = await http.delete(url, headers: headers); 
+      
+      print('Delete Status Code: ${response.statusCode}');
+      print('Delete Response Body: ${response.body}');
+      
+      if(response.statusCode == 200 || response.statusCode == 201 || response.statusCode == 204){
+        return Success(true); 
+      }
+      else{
+        if (response.body.isNotEmpty) {
+          final data = json.decode(response.body);
+          String errorMessage = data['message'] != null ? listToString(data['message']) : 'Error al eliminar producto';
+          return Error(errorMessage);
+        } else {
+          return Error('Error al eliminar producto: Status ${response.statusCode}');
+        }
+      }
+    } catch (e) {
+      print('Error al eliminar el producto: $e');
+      return Error(e.toString());
+    }
+  }
+
 }

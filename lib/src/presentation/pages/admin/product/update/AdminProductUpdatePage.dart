@@ -1,5 +1,7 @@
 import 'package:ecommerce_flutter/src/domain/models/Product.dart';
 import 'package:ecommerce_flutter/src/domain/utils/Resource.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/admin/product/list/bloc/AdminProductListBloc.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/admin/product/list/bloc/AdminProductListEvent.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/product/update/AdminProductUpdateContent.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/product/update/bloc/AdminProductUpdateBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/product/update/bloc/AdminProductUpdateEvent.dart';
@@ -19,28 +21,29 @@ class _AdminProductUpdatePageState extends State<AdminProductUpdatePage> {
 
   AdminProductUpdateBloc? _bloc;
   Product? product;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _bloc?.add(AdminProductUpdateInitEvent(product: product));
-    });
-  }
-
+  bool _initialized = false;
 
   @override
   Widget build(BuildContext context) {
     _bloc = BlocProvider.of<AdminProductUpdateBloc>(context);
     product = ModalRoute.of(context)?.settings.arguments as Product;
+    
+    if (!_initialized && product != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _bloc?.add(ResetForm()); 
+        _bloc?.add(AdminProductUpdateInitEvent(product: product)); 
+      });
+      _initialized = true;
+    }
+    
     return Scaffold(
       body: BlocListener<AdminProductUpdateBloc, AdminProductUpdateState>(
         listener: (context, state){
           final responseState = state.response;
           if(responseState is Success){
-            _bloc?.add(ResetForm());
+            context.read<AdminProductListBloc>().add(GetProductsByCategory(id_category: product!.id_category));
             Fluttertoast.showToast(
-              msg: 'Producto creado correctamente',
+              msg: 'Producto actualizado correctamente', 
               toastLength: Toast.LENGTH_LONG,
               gravity: ToastGravity.BOTTOM,
               timeInSecForIosWeb: 1,
@@ -61,11 +64,17 @@ class _AdminProductUpdatePageState extends State<AdminProductUpdatePage> {
           }
         },
         child: BlocBuilder<AdminProductUpdateBloc, AdminProductUpdateState>(
-        builder: (context, state) {
-          return AdminProductUpdateContent(_bloc, state, product);
+          builder: (context, state) {
+            return AdminProductUpdateContent(_bloc, state, product);
           },
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _bloc?.add(ResetForm());
+    super.dispose();
   }
 }

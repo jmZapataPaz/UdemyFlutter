@@ -182,9 +182,12 @@ class AdminProductUpdateContent extends StatelessWidget {
             : product != null ? 
             FadeInImage.assetNetwork(
               placeholder: 'assets/img/user_image.png', 
-              image: product!.image1!,
+              image: '${product!.image1!}?v=${DateTime.now().millisecondsSinceEpoch}', 
               fit: BoxFit.cover,
               fadeInDuration: Duration(seconds: 1),
+              imageErrorBuilder: (context, error, stackTrace) {
+                return Image.asset('assets/img/no-image.png', fit: BoxFit.cover);
+              },
             ): 
             Image.asset('assets/img/no-image.png', fit: BoxFit.contain,), 
           ),
@@ -216,9 +219,12 @@ class AdminProductUpdateContent extends StatelessWidget {
             : product != null ? 
             FadeInImage.assetNetwork(
               placeholder: 'assets/img/user_image.png', 
-              image: product!.image2!,
+              image: '${product!.image2!}?v=${DateTime.now().millisecondsSinceEpoch}', // Agregar timestamp
               fit: BoxFit.cover,
               fadeInDuration: Duration(seconds: 1),
+              imageErrorBuilder: (context, error, stackTrace) {
+                return Image.asset('assets/img/no-image.png', fit: BoxFit.cover);
+              },
             ): 
             Image.asset('assets/img/no-image.png', fit: BoxFit.contain,), 
           ),

@@ -19,6 +19,20 @@ class ProductRepositoryIMP implements ProductRepository {
   Future<Resource<List<Product>>> getProductsByCategory(int id_category) {
     return productService.getProductsByCategoryt(id_category);
   }
+  
+  @override
+  Future<Resource<Product>> updateProductById(int id, Product product, List<File>? files, List<int>? imagesToUpdate) {
+  if(files != null && imagesToUpdate != null) {
+    return productService.updateProductById(id, product, files, imagesToUpdate);
+  } else{
+    return productService.updateProductById(id, product, [], null);
+  }
+}
+
+  @override
+  Future<Resource<bool>> deleteProduct(int id) {
+    return productService.deleteProduct(id);
+  }
 
 
 }

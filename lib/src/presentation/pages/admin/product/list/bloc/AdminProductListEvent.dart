@@ -15,8 +15,16 @@ class GetProductsByCategory extends AdminProductListEvent {
   });
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id_category];
 
+}
 
+class DeleteProduct extends AdminProductListEvent {
+  final int id;
+  const DeleteProduct({
+    required this.id
+  });
+
+  @override
+  List<Object?> get props => [id];
 }
