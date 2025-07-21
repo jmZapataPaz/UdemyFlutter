@@ -54,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
               final authResponse = responseState.data as AuthResponse;
               //_bloc?.add(LoginFormReset());
               _bloc?.add(LoginSaveUserSession(authResponse: authResponse));
+              
                 WidgetsBinding.instance.addPostFrameCallback((timeStamp){
                   Navigator.pushNamedAndRemoveUntil(context, 'roles',(route) => false);
                 });

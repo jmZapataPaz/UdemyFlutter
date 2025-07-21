@@ -13,38 +13,69 @@ class ShoppingBagRepositoryIMP implements ShoppingBagRepository {
     try {
       List<Product> products = await getProducts();
       int index = products.indexWhere((p) => p.id == product.id);
+      
       if (index != -1) {
-        products[index].quantity = (products[index].quantity ?? 0) + (product.quantity ?? 1);
+        products[index].quantity = product.quantity ?? 1;
       } else {
         products.add(product);
       }
       
       List<Map<String, dynamic>> productsJson = products.map((p) => p.toJson()).toList();
       await sharedPref.save('shopping_bag', productsJson);
+      
+      print('Producto actualizado en carrito: ${product.toJson()}');
+      print('Total productos en carrito: ${products.length}');
     } catch (e) {
       print('Error al agregar producto al carrito: $e');
     }
   }
 
-  @override
-  Future<void> deleteShoppingBag()async {
-    await sharedPref.remove('shopping_bag');
-  }
-
-
-
-  @override
-  Future<void> deleteitem(Product product) async{
-    final data = await sharedPref?.read('shopping_bag');
-    if(data == null){
-      return;
+  Future<void> updateProductQuantity(Product product, int newQuantity) async {
+    try {
+      List<Product> products = await getProducts();
+      int index = products.indexWhere((p) => p.id == product.id);
+      
+      if (index != -1) {
+        if (newQuantity <= 0) {
+          products.removeAt(index);
+        } else {
+          products[index].quantity = newQuantity;
+        }
+        
+        List<Map<String, dynamic>> productsJson = products.map((p) => p.toJson()).toList();
+        await sharedPref.save('shopping_bag', productsJson);
+        
+        print('Cantidad actualizada para producto ${product.id}: $newQuantity');
+      }
+    } catch (e) {
+      print('Error al actualizar cantidad: $e');
     }
-    List<Product> selectedProducts = Product.fromJsonList(data).toList();
-    selectedProducts.removeWhere((p) => p.id == product.id);
-    await sharedPref.save('shopping_bag', selectedProducts);
   }
 
+  @override
+  Future<void> deleteShoppingBag() async {
+    try {
+      await sharedPref.remove('shopping_bag');
+      print('Carrito de compras limpiado');
+    } catch (e) {
+      print('Error al limpiar carrito: $e');
+    }
+  }
 
+  @override
+  Future<void> deleteitem(Product product) async {
+    try {
+      List<Product> products = await getProducts();
+      products.removeWhere((p) => p.id == product.id);
+      
+      List<Map<String, dynamic>> productsJson = products.map((p) => p.toJson()).toList();
+      await sharedPref.save('shopping_bag', productsJson);
+      
+      print('Producto eliminado del carrito: ${product.id}');
+    } catch (e) {
+      print('Error al eliminar producto del carrito: $e');
+    }
+  }
 
   @override
   Future<List<Product>> getProducts() async {
@@ -55,6 +86,7 @@ class ShoppingBagRepositoryIMP implements ShoppingBagRepository {
         print('No hay productos en el carrito');
         return [];
       }
+      
       List<dynamic> productsJson;
       
       if (data is String) {
@@ -83,8 +115,19 @@ class ShoppingBagRepositoryIMP implements ShoppingBagRepository {
       return [];
     }
   }
+  
+  @override
+  Future<double> getTotal() async  {
+    final data = await sharedPref.read('shopping_bag');
+    if (data == null) {
+      return 0;
+    } 
+    double total = 0;
+    List<Product> selectedProducts =  Product.fromJsonList(data).toList();
+    selectedProducts.forEach((product){
+      total = total + (product.price * (product.quantity ?? 1));
+    });
 
-
-
-
+    return total;
+  }
 }

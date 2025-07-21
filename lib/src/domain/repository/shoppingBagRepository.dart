@@ -6,5 +6,6 @@ abstract class ShoppingBagRepository{
   Future<List<Product>>getProducts();
   Future<void>deleteitem(Product product);
   Future<void>deleteShoppingBag();
+  Future<double>getTotal();
 
 }

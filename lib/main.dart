@@ -11,6 +11,7 @@ import 'package:ecommerce_flutter/src/presentation/pages/auth/register/RegisterP
 import 'package:ecommerce_flutter/src/presentation/pages/client/home/ClientHomePage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/product/detail/ClientProductDetailPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/product/list/ClientProductListPage.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/shoppingBag/ClientShoppingBagPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/profile/info/ProfileInfoPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/profile/update/ProfileUpdatePage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/roles/RolesPage.dart';
@@ -50,6 +51,7 @@ class MainApp extends StatelessWidget {
         'profile/update': (BuildContext context) => ProfileUpdatePage(),
         'client/product/list': (BuildContext context) => ClientProductListPage(),
         'client/product/detail': (BuildContext context) => ClientProductDetailPage(),
+        'client/shoppingBag': (BuildContext context) => ClientShoppingBagPage(),
         
       },
     )
