@@ -1,4 +1,5 @@
 import 'package:ecommerce_flutter/injection.dart';
+import 'package:ecommerce_flutter/src/domain/useCases/address/AddressUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/auth/authUseCases.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/categories/CategoryUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/products/ProductUseCase.dart';
@@ -15,6 +16,9 @@ import 'package:ecommerce_flutter/src/presentation/pages/auth/login/bloc/LoginBl
 import 'package:ecommerce_flutter/src/presentation/pages/auth/login/bloc/LoginEvent.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/auth/register/bloc/RegisterBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/auth/register/bloc/RegisterEvent.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/address/create/bloc/ClientAddressCreateBloc.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/address/create/bloc/ClientAddressCreateEvent.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/address/list/bloc/ClientAddressListBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/category/list/bloc/ClientCategoryListBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/home/bloc/ClientHomeBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/product/detail/bloc/ClientProductDetailBloc.dart';
@@ -62,5 +66,8 @@ List<BlocProvider> blocProviders = [
     create: (context) => ClientProductDetailBloc(locator<ShoppingBagUseCases>())),
   BlocProvider<ClientShoppingBagBloc>(
     create: (context) => ClientShoppingBagBloc(locator<ShoppingBagUseCases>())),
-
+  BlocProvider<ClientAddressCreateBloc>(
+    create: (context) => ClientAddressCreateBloc(locator<AddressUseCase>(),locator<AuthUseCases>())..add(ClientAddressCreateInitEvent())),  
+  BlocProvider<ClientAddressListBloc>(
+    create: (context) => ClientAddressListBloc(locator<AddressUseCase>(), locator<AuthUseCases>())),
 ];

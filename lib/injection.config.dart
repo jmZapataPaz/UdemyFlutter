@@ -11,6 +11,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:ecommerce_flutter/src/data/dataSource/local/sharedPref.dart'
     as _i882;
+import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/AddressService.dart'
+    as _i482;
 import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/AuthService.dart'
     as _i493;
 import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/CategoryService.dart'
@@ -20,6 +22,8 @@ import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/ProductSer
 import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/UserService.dart'
     as _i380;
 import 'package:ecommerce_flutter/src/di/appModule.dart' as _i896;
+import 'package:ecommerce_flutter/src/domain/repository/addressRepository.dart'
+    as _i840;
 import 'package:ecommerce_flutter/src/domain/repository/authRepository.dart'
     as _i1040;
 import 'package:ecommerce_flutter/src/domain/repository/categoryRepository.dart'
@@ -30,6 +34,8 @@ import 'package:ecommerce_flutter/src/domain/repository/shoppingBagRepository.da
     as _i78;
 import 'package:ecommerce_flutter/src/domain/repository/userRepository.dart'
     as _i242;
+import 'package:ecommerce_flutter/src/domain/useCases/address/AddressUseCase.dart'
+    as _i988;
 import 'package:ecommerce_flutter/src/domain/useCases/auth/authUseCases.dart'
     as _i685;
 import 'package:ecommerce_flutter/src/domain/useCases/auth/loginUseCase.dart'
@@ -72,6 +78,9 @@ extension GetItInjectableX on _i174.GetIt {
       () => appModule.shoppingBagRepository,
     );
     gh.factory<_i11.ShoppingBagUseCases>(() => appModule.shoppingBagUseCases);
+    gh.factory<_i482.AddressService>(() => appModule.addressService);
+    gh.factory<_i840.AddressRepository>(() => appModule.addressRepository);
+    gh.factory<_i988.AddressUseCase>(() => appModule.addressUseCase);
     return this;
   }
 }

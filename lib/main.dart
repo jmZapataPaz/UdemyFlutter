@@ -1,3 +1,4 @@
+import 'package:app_links/app_links.dart';
 import 'package:ecommerce_flutter/injection.dart';
 import 'package:ecommerce_flutter/src/blockProviders.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/category/create/AdminCategoryCreatePage.dart';
@@ -8,7 +9,10 @@ import 'package:ecommerce_flutter/src/presentation/pages/admin/product/list/Admi
 import 'package:ecommerce_flutter/src/presentation/pages/admin/product/update/AdminProductUpdatePage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/auth/login/LoginPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/auth/register/RegisterPage.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/address/create/ClientAddressCreatePage.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/address/list/ClientAddressListPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/home/ClientHomePage.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/payment/success/PaymentSuccessPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/product/detail/ClientProductDetailPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/product/list/ClientProductListPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/shoppingBag/ClientShoppingBagPage.dart';
@@ -25,8 +29,30 @@ void main() async {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
+
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  final _appLinks = AppLinks();
+
+  @override
+  void initState() {
+    super.initState();
+    _listenToLinks();
+  }
+
+  void _listenToLinks(){
+    _appLinks.uriLinkStream.listen((Uri? uri){
+      if(uri != null && uri.toString().contains('/success')){
+        navigatorKey.currentState?.pushNamed('client/payment/success');
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +60,7 @@ class MainApp extends StatelessWidget {
       providers: blocProviders,
       child: MaterialApp(
         builder: FToastBuilder(),
+        navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false, 
       initialRoute: 'login',
       routes: {
@@ -52,6 +79,9 @@ class MainApp extends StatelessWidget {
         'client/product/list': (BuildContext context) => ClientProductListPage(),
         'client/product/detail': (BuildContext context) => ClientProductDetailPage(),
         'client/shoppingBag': (BuildContext context) => ClientShoppingBagPage(),
+        'client/address/list': (BuildContext context) => ClientAddressListPage(),
+        'client/address/create': (BuildContext context) => ClientAddressCreatePage(),
+        'client/payment/success': (BuildContext context) => PaymentSuccessPage(),
         
       },
     )

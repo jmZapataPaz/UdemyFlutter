@@ -29,7 +29,9 @@ class ClientShoppingBagBottomBar extends StatelessWidget {
                 
                 child: DefaultButton(
                   text: 'Confirmar orden', 
-                  onPressed: (){}
+                  onPressed: (){
+                    Navigator.pushNamed(context, 'client/address/list');
+                  }
                 ),
               )
             ],

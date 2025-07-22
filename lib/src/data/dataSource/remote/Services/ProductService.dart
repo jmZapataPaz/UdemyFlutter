@@ -64,13 +64,7 @@ class ProductService{
         'Authorization': await token
       };
       
-      print('URL para obtener categorías: $url');
-      print('Token: $token');
-      
       final response = await http.get(url, headers: headers);
-      
-      print('Status Code: ${response.statusCode}');
-      print('Response Body: ${response.body}');
       
       if (response.body.isEmpty) {
         return Error('Respuesta vacía del servidor');
@@ -80,6 +74,16 @@ class ProductService{
       
       if(response.statusCode == 200 || response.statusCode == 201){
         List<Product> products = List<Product>.from(data.map((x) => Product.fromJson(x)));
+        
+        products.forEach((product) {
+          print('🖼️ ═══ PRODUCTO DESDE API ═══');
+          print('🆔 ID: ${product.id}');
+          print('🏷️ Nombre: ${product.name}');
+          print('🖼️ Image1: ${product.image1}');
+          print('🖼️ Image2: ${product.image2}');
+          print('═══════════════════════════');
+        });
+        
         return Success(products);
       }
       else{
@@ -87,7 +91,7 @@ class ProductService{
         return Error(errorMessage);
       }
     } catch (e) {
-      print('Error al obtener categorías: $e');
+      print('❌ Error al obtener productos: $e');
       return Error('Error de conexión: ${e.toString()}');
     }
   }
