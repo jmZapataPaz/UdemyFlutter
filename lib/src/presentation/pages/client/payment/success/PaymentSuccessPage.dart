@@ -274,12 +274,14 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage>
               height: 56,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    'client/home',
-                    (route) => false,
-                  );
-                },
+                Navigator.popUntil(context, (route) {
+                  return route.settings.name == 'client/home' || route.isFirst;
+                });
+                
+                if (ModalRoute.of(context)?.settings.name != 'client/home') {
+                  Navigator.pushReplacementNamed(context, 'client/home');
+                }
+              },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,

@@ -4,6 +4,7 @@ import 'package:ecommerce_flutter/src/blockProviders.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/category/create/AdminCategoryCreatePage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/category/update/AdminCategoryUpdatePage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/home/AdminHomePage.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/admin/order/detail/AdminOrderDetailPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/product/create/AdminProductCreatePage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/product/list/AdminProductListPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/product/update/AdminProductUpdatePage.dart';
@@ -12,6 +13,7 @@ import 'package:ecommerce_flutter/src/presentation/pages/auth/register/RegisterP
 import 'package:ecommerce_flutter/src/presentation/pages/client/address/create/ClientAddressCreatePage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/address/list/ClientAddressListPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/home/ClientHomePage.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/order/detail/ClientOrderDetailPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/payment/success/PaymentSuccessPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/product/detail/ClientProductDetailPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/product/list/ClientProductListPage.dart';
@@ -74,6 +76,8 @@ class _MainAppState extends State<MainApp> {
         'admin/product/list': (BuildContext context) => AdminProductListPage(),
         'admin/product/create': (BuildContext context) => AdminProductCreatePage(),
         'admin/product/update': (BuildContext context) => AdminProductUpdatePage(),
+        'admin/order/detail': (BuildContext context) => AdminOrderDetailPage(),          
+        'client/order/detail': (BuildContext context) => ClientOrderDetailPage(),
         'profile/info': (BuildContext context) => ProfileInfoPage(),
         'profile/update': (BuildContext context) => ProfileUpdatePage(),
         'client/product/list': (BuildContext context) => ClientProductListPage(),

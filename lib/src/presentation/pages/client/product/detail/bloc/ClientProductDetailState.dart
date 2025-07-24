@@ -1,16 +1,24 @@
 import 'package:equatable/equatable.dart';
 
-class ClientProductDetailState extends Equatable{
+class ClientProductDetailState extends Equatable {
   final int quantity;
-  ClientProductDetailState({this.quantity = 0});
+  final bool productAdded;
 
-  ClientProductDetailState copyWith({int? quantity}) {
+  const ClientProductDetailState({
+    this.quantity = 0,
+    this.productAdded = false, 
+  });
+
+  ClientProductDetailState copyWith({
+    int? quantity,
+    bool? productAdded, o
+  }) {
     return ClientProductDetailState(
       quantity: quantity ?? this.quantity,
+      productAdded: productAdded ?? this.productAdded, 
     );
   }
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [quantity];
+  List<Object?> get props => [quantity, productAdded]; 
 }

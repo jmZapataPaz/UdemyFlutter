@@ -3,6 +3,7 @@ import 'package:ecommerce_flutter/src/presentation/pages/admin/category/list/Adm
 import 'package:ecommerce_flutter/src/presentation/pages/admin/home/bloc/AdminHomeBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/home/bloc/AdminHomeEvent.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/home/bloc/AdminHomeState.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/admin/order/list/AdminOrderListPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/profile/info/ProfileInfoPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/roles/RolesPage.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   AdminHomeBloc? _bloc;
   List<Widget> pageList = <Widget>[
     AdminCategoryListPage(),
+    AdminOrderListPage(),
     RolesPage(),
     ProfileInfoPage(),
   ];
@@ -59,7 +61,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   },
                 ),
                 ListTile(
-                  title: Text('Roles'),
+                  title: Text('Órdenes'),
                   selected: state.pageIndex == 1,
                   onTap: (){
                     _bloc?.add(AdminChangeDrawerPage(
@@ -70,11 +72,22 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   },
                 ),
                 ListTile(
-                  title: Text('Perfil de Usuario'),
+                  title: Text('Roles'),
                   selected: state.pageIndex == 2,
                   onTap: (){
                     _bloc?.add(AdminChangeDrawerPage(
                       pageIndex: 2
+                      )
+                    );
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text('Perfil de Usuario'),
+                  selected: state.pageIndex == 3,
+                  onTap: (){
+                    _bloc?.add(AdminChangeDrawerPage(
+                      pageIndex: 3
                       )
                     );
                     Navigator.pop(context);

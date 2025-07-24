@@ -54,10 +54,16 @@ class ClientProductDetailBloc extends Bloc<ClientProductDetailEvent, ClientProdu
   }
 
   Future<void> _onAddProductToShoppingBag(AddProductToShoppingBag event, Emitter<ClientProductDetailState> emit) async{
+    if (state.quantity <= 0) {
+      return;
+    }
     
     event.product.quantity = state.quantity;
-    shoppingBagUseCases.addShoppingBagUseCase.run(event.product);
-
+    await shoppingBagUseCases.addShoppingBagUseCase.run(event.product);
+    emit(state.copyWith(productAdded: true));
+    
+    await Future.delayed(Duration(milliseconds: 100));
+    emit(state.copyWith(productAdded: false));
   }    
     
 

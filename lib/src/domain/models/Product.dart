@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:ecommerce_flutter/src/data/api/ApiConfig.dart';
 
 Product productFromJson(String str) => Product.fromJson(json.decode(str));
 
@@ -34,16 +35,24 @@ class Product {
         return toList;
     }
 
-    factory Product.fromJson(Map<String, dynamic> json) => Product(
+    factory Product.fromJson(Map<String, dynamic> json) {
+      String normalizeImageUrl(String? url) {
+        if (url == null || url.isEmpty) return '';
+        if (url.startsWith('http')) return url;
+        return 'http://${ApiConfig.API_ECOMMERCE}$url';
+      }
+
+      return Product(
         id: json["id"],
         id_category: json["id_category"] is String ? int.parse(json["id_category"]) : json["id_category"],
         name: json["name"] ?? '',
         description: json["description"] ?? '',
         price: json["price"] is String ? double.parse(json["price"]) : json["price"] is int ? json["price"].toDouble() : json["price"],
-        image1: json["image1"],
-        image2: json["image2"],
+        image1: normalizeImageUrl(json['image1']),
+        image2: normalizeImageUrl(json['image2']),
         quantity: json["quantity"]
-    );
+      );
+    }
 
     Map<String, dynamic> toJson() => {
         "id": id,

@@ -183,9 +183,11 @@ class ClientProductDetailContent extends StatelessWidget {
             height: MediaQuery.of(context).size.height*0.055,
             child: DefaultButton(
               text: 'Agregar', 
-              onPressed: (){
-                _bloc?.add(AddProductToShoppingBag(product: product!));
-              }
+              onPressed: () { 
+                if (state.quantity > 0) {
+                  _bloc?.add(AddProductToShoppingBag(product: product!));
+                }
+              }, 
             ),
           )
         ],

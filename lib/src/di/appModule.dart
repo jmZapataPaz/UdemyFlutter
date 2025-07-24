@@ -2,12 +2,15 @@ import 'package:ecommerce_flutter/src/data/dataSource/local/sharedPref.dart';
 import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/AddressService.dart';
 import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/AuthService.dart';
 import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/CategoryService.dart';
+import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/OrdersService.dart';
 import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/ProductService.dart';
 import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/UserService.dart';
 import 'package:ecommerce_flutter/src/data/repository/addressRepositoryIMP.dart';
+import 'package:ecommerce_flutter/src/data/repository/orderRepositoryIMP.dart';
 import 'package:ecommerce_flutter/src/data/repository/productRepositoryIMP.dart';
 import 'package:ecommerce_flutter/src/data/repository/shoppingBagRepositoryIMP.dart';
 import 'package:ecommerce_flutter/src/domain/models/AuthResponse.dart';
+import 'package:ecommerce_flutter/src/domain/repository/OrdersRepository.dart';
 import 'package:ecommerce_flutter/src/domain/repository/addressRepository.dart';
 import 'package:ecommerce_flutter/src/domain/repository/categoryRepository.dart';
 import 'package:ecommerce_flutter/src/domain/repository/productRepository.dart';
@@ -25,6 +28,11 @@ import 'package:ecommerce_flutter/src/domain/useCases/categories/CreateCategoryU
 import 'package:ecommerce_flutter/src/domain/useCases/categories/DeleteCategoryUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/categories/GetCategoryUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/categories/UpdateCategoryUseCase.dart';
+import 'package:ecommerce_flutter/src/domain/useCases/orders/CreateOrdersUseCase.dart';
+import 'package:ecommerce_flutter/src/domain/useCases/orders/GetOrdersByClientUseCase.dart';
+import 'package:ecommerce_flutter/src/domain/useCases/orders/GetOrdersUseCase.dart';
+import 'package:ecommerce_flutter/src/domain/useCases/orders/OrdersUseCases.dart';
+import 'package:ecommerce_flutter/src/domain/useCases/orders/UpdateStatusOrderUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/products/CreateProductUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/products/DeleteProductUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/products/GetProductByCategoryUseCase.dart';
@@ -166,5 +174,23 @@ abstract class AppModule{
     deleteAddressUseCase: DeleteAddressUseCase(addressRepository),
     deleteAddressSessionUseCase: DeleteAddressSessionUseCase(addressRepository),
     
+  );
+
+
+  //orders
+
+  @injectable
+  OrdersService get ordersService => OrdersService(token);
+
+
+  @injectable
+  OrdersRepository get ordersRepository => OrderRepositoryImpl(ordersService);
+
+  @injectable
+  OrdersUseCases get ordersUseCases => OrdersUseCases(
+    getOrders: GetOrdersUseCase(ordersRepository),
+    getOrdersByClient: GetOrdersByClientUseCase(ordersRepository),
+    updateStatus: UpdateStatusOrderUseCase(ordersRepository),
+    createOrder: CreateOrdersUseCase(ordersRepository),
   );
 }

@@ -3,6 +3,7 @@ import 'package:ecommerce_flutter/src/presentation/pages/client/category/list/Cl
 import 'package:ecommerce_flutter/src/presentation/pages/client/home/bloc/ClientHomeBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/home/bloc/ClientHomeEvent.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/home/bloc/ClientHomeState.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/order/list/ClientOrderListPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/profile/info/ProfileInfoPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/roles/RolesPage.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class _ClientHomePageState extends State<ClientHomePage> {
   ClientHomeBloc? _bloc;
   List<Widget> pageList = <Widget>[
     ClientCategoryListPage(),
+    ClientOrderListPage(),
     ProfileInfoPage(),
     RolesPage(),
   ];
@@ -70,21 +72,29 @@ class _ClientHomePageState extends State<ClientHomePage> {
                   },
                 ),
                 ListTile(
-                  title: Text('Perfil de Usuario'),
+                  title: Text('Mis pedidos'),
                   selected: state.pageIndex == 1,
                   onTap: () {
+                    _bloc?.add(ChangeDrawerPage(pageIndex: 1));
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text('Perfil de Usuario'),
+                  selected: state.pageIndex == 2,
+                  onTap: () {
                     _bloc?.add(ChangeDrawerPage(
-                      pageIndex: 1
+                      pageIndex: 2
                     ));
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
                   title: Text('Roles'),
-                  selected: state.pageIndex == 2,
+                  selected: state.pageIndex == 3,
                   onTap: () {
                     _bloc?.add(ChangeDrawerPage(
-                      pageIndex: 2
+                      pageIndex: 3
                     ));
                     Navigator.pop(context);
                   },

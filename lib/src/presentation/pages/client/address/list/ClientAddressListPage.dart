@@ -1,4 +1,7 @@
+import 'package:ecommerce_flutter/injection.dart';
 import 'package:ecommerce_flutter/src/domain/models/Address.dart';
+import 'package:ecommerce_flutter/src/domain/models/Order.dart';
+import 'package:ecommerce_flutter/src/domain/useCases/shoppingBag/ShoppingBagUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/utils/Resource.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/address/list/ClientAddressListItem.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/address/list/bloc/ClientAddressListBloc.dart';
@@ -52,12 +55,26 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
           child: Text('Pagar')),
       ),
 
-      body:BlocListener<ClientAddressListBloc, ClientAddressListState>(
+      body: BlocListener<ClientAddressListBloc, ClientAddressListState>(
         listener: (context, state){
           final responseState = state.response;
           if(responseState is Success){
             if(responseState.data is bool && responseState.data == true){
               _bloc?.add(GetUserAddress()); 
+            }
+            else if(responseState.data is Order) {
+              Fluttertoast.showToast(
+                msg: "¡Orden creada exitosamente!",
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+              );
+              final shoppingBagUseCases = locator<ShoppingBagUseCases>();
+              shoppingBagUseCases.deleteShoppingBagUseCase.run();
+              Navigator.pushNamedAndRemoveUntil(
+                context, 
+                'client/payment/success', 
+                (route) => false
+              );
             }
           }
           if(responseState is Error){
@@ -76,7 +93,7 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
         child: BlocBuilder<ClientAddressListBloc, ClientAddressListState>(
           builder: (context, state){
             final responseState = state.response;
-            if(responseState is Success){
+            if(responseState is Success && responseState.data is List<Address>){
               List<Address> address = responseState.data as List<Address>;
               _bloc?.add(SetAddressSession(addressList: address));
               return ListView.builder(
@@ -86,7 +103,7 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
                 },
               );
             }
-          return Container();
+            return Container();
           },
         ),
       ),
