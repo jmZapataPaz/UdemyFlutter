@@ -22,7 +22,7 @@ class _ClientAddressCreatePageState extends State<ClientAddressCreatePage> {
   Widget build(BuildContext context) {
     _bloc = BlocProvider.of<ClientAddressCreateBloc>(context);
     return Scaffold(
-      body:BlocListener<ClientAddressCreateBloc, ClientAddressCreateState>(
+      body: BlocListener<ClientAddressCreateBloc, ClientAddressCreateState>(
         listenWhen: (previous, current) {
           return (previous.response is Loading && current.response is! Loading) ||
                  (previous.response is! Error && current.response is Error);
@@ -31,6 +31,7 @@ class _ClientAddressCreatePageState extends State<ClientAddressCreatePage> {
           final responseState = state.response;
           if (responseState is Success){
             Navigator.pop(context, true);
+            
             Fluttertoast.showToast(
               msg: 'Dirección creada correctamente',
               toastLength: Toast.LENGTH_SHORT,

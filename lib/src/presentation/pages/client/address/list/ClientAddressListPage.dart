@@ -40,8 +40,11 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add, color: Colors.white),
-            onPressed: () {
-              Navigator.pushNamed(context, 'client/address/create');
+            onPressed: () async {
+              final result = await Navigator.pushNamed(context, 'client/address/create');
+              if (result == true) {
+                _bloc?.add(GetUserAddress());
+              }
             },
           ),
         ],
