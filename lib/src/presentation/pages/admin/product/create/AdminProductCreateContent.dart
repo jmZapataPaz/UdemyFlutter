@@ -16,6 +16,9 @@ class AdminProductCreateContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Form(
       key: state.formKey,
       child: Stack(
@@ -32,18 +35,17 @@ class AdminProductCreateContent extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _imageProduct1(context),
-                        SizedBox(width: 20),
+                        SizedBox(width: screenWidth * (isTablet ? 0.05 : 0.05)),
                         _imageProduct2(context),
                       ],
                     ),
                     _cardCategoryForm(context),
-                    
                   ],
                 ),
               ),
             ),
             DefaultIconBack(
-              left: MediaQuery.of(context).size.width * 0.05, 
+              left: screenWidth * 0.05, 
               top: MediaQuery.of(context).padding.top + 10,
           ),
         ],
@@ -52,6 +54,9 @@ class AdminProductCreateContent extends StatelessWidget {
   }
 
   Widget _cardCategoryForm( BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.53,
@@ -63,47 +68,66 @@ class AdminProductCreateContent extends StatelessWidget {
         ),
       ),
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        margin: EdgeInsets.symmetric(
+          horizontal: screenWidth * (isTablet ? 0.1 : 0.05), 
+          vertical: screenWidth * (isTablet ? 0.05 : 0.08),
+        ),
         child: Column(
           children: [
-            _textNewProduct(),
-            _textFieldName(),
-            _textFieldDescription(),
-            _textFieldPrice(),
-            _fabSubmit()
+            _textNewProduct(context),
+            _textFieldName(context),
+            _textFieldDescription(context),
+            _textFieldPrice(context),
+            _fabSubmit(context)
           ],
         ),
       )
     );
   }
 
-  Widget _fabSubmit(){
+  Widget _fabSubmit(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Container(
       alignment: Alignment.centerRight,
-      margin: EdgeInsets.only(top: 30, right: 10),
-      child: FloatingActionButton(
-        onPressed: () {
-          if(state.formKey!.currentState!.validate()) {
-            bloc?.add(FormSubmit());
-          }
-        },
-        tooltip: 'Submit Category',
-        backgroundColor: Colors.black,
-        child: Icon(
-          Icons.check,
-          color: Colors.white,
+      margin: EdgeInsets.only(
+        top: screenWidth * (isTablet ? 0.08 : 0.08), 
+      ),
+      child: SizedBox(
+        width: screenWidth * (isTablet ? 0.12 : 0.15),
+        height: screenWidth * (isTablet ? 0.12 : 0.15),
+        child: FloatingActionButton(
+          onPressed: () {
+            if(state.formKey!.currentState!.validate()) {
+              bloc?.add(FormSubmit());
+            }
+          },
+          tooltip: 'Submit Product',
+          backgroundColor: Colors.black,
+          child: Icon(
+            Icons.check,
+            color: Colors.white,
+            size: screenWidth * (isTablet ? 0.05 : 0.06),
+          ),
         ),
       ),
     );
   }
 
-  Widget _textNewProduct(){
+  Widget _textNewProduct(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Container(
-      alignment: Alignment.centerLeft,
-      margin: EdgeInsets.only(top: 25, left:10, bottom: 10),
+      alignment: Alignment.center,
+      margin: EdgeInsets.only(
+        top: screenWidth * (isTablet ? 0.05 : 0.06), 
+        bottom: screenWidth * (isTablet ? 0.025 : 0.03),
+      ),
       child: Text('Nuevo Producto',
         style: TextStyle(
-          fontSize: 20,
+          fontSize: screenWidth * (isTablet ? 0.04 : 0.05),
           fontWeight: FontWeight.bold,
           color: Colors.black
         ),
@@ -111,50 +135,80 @@ class AdminProductCreateContent extends StatelessWidget {
     );
   }
 
-  Widget _textFieldName(){
-    return DefaultTextField(
-      label: 'Nombre del producto', 
-      icon: Icons.category, 
-      onChanded: (text){
-        bloc?.add(NameChanged(BlocFormItem(value: text))); 
-      },
-      validator: (value){
-        return state.name.error;
-      },
-      color: Colors.black,
+  Widget _textFieldName(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: screenWidth * (isTablet ? 0.02 : 0.025)),
+      child: Transform.scale(
+        scale: isTablet ? 1.15 : 1.0,
+        child: DefaultTextField(
+          label: 'Nombre del producto', 
+          icon: Icons.category, 
+          onChanded: (text){
+            bloc?.add(NameChanged(BlocFormItem(value: text))); 
+          },
+          validator: (value){
+            return state.name.error;
+          },
+          color: Colors.black,
+        ),
+      ),
     );
   }
 
-  Widget _textFieldDescription(){
-    return DefaultTextField(
-      label: 'Descripcion del producto', 
-      icon: Icons.list, 
-      onChanded: (text){
-        bloc?.add(DescriptionChanged(BlocFormItem(value: text))); 
-      },
-      validator: (value){
-        return state.description.error;
-      },
-      color: Colors.black,
+  Widget _textFieldDescription(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: screenWidth * (isTablet ? 0.02 : 0.025)),
+      child: Transform.scale(
+        scale: isTablet ? 1.15 : 1.0,
+        child: DefaultTextField(
+          label: 'Descripcion del producto', 
+          icon: Icons.list, 
+          onChanded: (text){
+            bloc?.add(DescriptionChanged(BlocFormItem(value: text))); 
+          },
+          validator: (value){
+            return state.description.error;
+          },
+          color: Colors.black,
+        ),
+      ),
     );
   }
 
-  Widget _textFieldPrice(){
-    return DefaultTextField(
-      label: 'Precio del producto', 
-      icon: Icons.money, 
-      textInputType: TextInputType.number,
-      onChanded: (text){
-        bloc?.add(PriceChanged(BlocFormItem(value: text))); 
-      },
-      validator: (value){
-        return state.price.error;
-      },
-      color: Colors.black,
+  Widget _textFieldPrice(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: screenWidth * (isTablet ? 0.02 : 0.025)),
+      child: Transform.scale(
+        scale: isTablet ? 1.15 : 1.0,
+        child: DefaultTextField(
+          label: 'Precio del producto', 
+          icon: Icons.money, 
+          textInputType: TextInputType.number,
+          onChanded: (text){
+            bloc?.add(PriceChanged(BlocFormItem(value: text))); 
+          },
+          validator: (value){
+            return state.price.error;
+          },
+          color: Colors.black,
+        ),
+      ),
     );
   }
 
   Widget _imageProduct1(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return GestureDetector(
       onTap: () {
         SelectOptionImageDialog(
@@ -164,8 +218,8 @@ class AdminProductCreateContent extends StatelessWidget {
         );
       },
       child: Container(
-        width: 150,
-        margin: EdgeInsets.only(top: 100),
+        width: screenWidth * (isTablet ? 0.40 : 0.4),
+        margin: EdgeInsets.only(top: screenWidth * (isTablet ? 0.15 : 0.25)),
         child: AspectRatio(
           aspectRatio: 1/1,
           child: ClipOval(
@@ -182,6 +236,9 @@ class AdminProductCreateContent extends StatelessWidget {
   }
 
   Widget _imageProduct2(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return GestureDetector(
       onTap: () {
         SelectOptionImageDialog(
@@ -191,8 +248,8 @@ class AdminProductCreateContent extends StatelessWidget {
         );
       },
       child: Container(
-        width: 150,
-        margin: EdgeInsets.only(top: 100),
+        width: screenWidth * (isTablet ? 0.40 : 0.4),
+        margin: EdgeInsets.only(top: screenWidth * (isTablet ? 0.15 : 0.25)),
         child: AspectRatio(
           aspectRatio: 1/1,
           child: ClipOval(

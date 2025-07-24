@@ -11,65 +11,136 @@ class AdminOrderDetailBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    bool isTablet = screenWidth > 600;
+    
     double total = 0;
     order?.orderHasProducts?.forEach((ohp) {
       total = total + (ohp.product.price * ohp.quantity);
     });
+    
     return Container(
-      width: MediaQuery.of(context).size.width * 0.85,
-      height: MediaQuery.of(context).size.height * 0.45,
+      width: screenWidth * (isTablet ? 0.9 : 0.85),
+      height: screenHeight * (isTablet ? 0.35 : 0.3), 
       decoration: BoxDecoration(
           color: Colors.grey[200],
           borderRadius: BorderRadius.all(Radius.circular(25))),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center, // VERTICAL
-        crossAxisAlignment: CrossAxisAlignment.center, // HORIZANTAL
-        children: [
-          ListTile(
-            leading: Icon(Icons.calendar_month, color: Colors.grey[400],),
-            title: Text('Fecha del pedido'),
-            subtitle: Text(order?.createdAt.toString() ?? ''),
-          ),
-          ListTile(
-            leading: Icon(Icons.person, color: Colors.grey[400],),
-            title: Text('Cliente y telefono'),
-            subtitle: Text('${order?.user?.name} ${order?.user?.lastname} - ${order?.user?.phone}'),
-          ),
-          ListTile(
-            leading: Icon(Icons.location_on, color: Colors.grey[400],),
-            title: Text('Direccion de entrega'),
-            subtitle: Text('${order?.address?.neighborhood} ${order?.address?.address}'),
-          ),
-          ListTile(
-            leading: Icon(Icons.change_circle, color: Colors.grey[400],),
-            title: Text('Estado de la orden'),
-            subtitle: Text(order?.status ?? ''),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                'Total: \$${total}',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18
+      child: Padding(
+        padding: EdgeInsets.all(screenWidth * (isTablet ? 0.03 : 0.02)),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _buildListTile(
+                      context,
+                      icon: Icons.calendar_month,
+                      title: 'Fecha del pedido',
+                        subtitle: order?.createdAt != null
+                          ? '${order!.createdAt.day.toString().padLeft(2, '0')}/${order!.createdAt.month.toString().padLeft(2, '0')}/${order!.createdAt.year}'
+                          : '',
+                      isTablet: isTablet,
+                    ),
+                    _buildListTile(
+                      context,
+                      icon: Icons.person,
+                      title: 'Cliente',
+                        subtitle: '${order?.user?.name ?? ''} ${order?.user?.lastname ?? ''}',
+                      isTablet: isTablet,
+                    ),
+                    _buildListTile(
+                      context,
+                      icon: Icons.person,
+                      title: 'Teléfono',
+                      subtitle: order?.user?.phone ?? '',
+                      isTablet: isTablet,
+                    ),
+                    _buildListTile(
+                      context,
+                      icon: Icons.location_on,
+                      title: 'Dirección de entrega',
+                      subtitle: '${order?.address?.neighborhood} ${order?.address?.address}',
+                      isTablet: isTablet,
+                    ),
+                    _buildListTile(
+                      context,
+                      icon: Icons.change_circle,
+                      title: 'Estado de la orden',
+                      subtitle: order?.status ?? '',
+                      isTablet: isTablet,
+                    ),
+                  ],
                 ),
               ),
-              Container(
-                width: 150,
-                child: order?.status == 'PAGADO' 
-                ? DefaultButton(
-                  text: 'DESPACHAR', 
-                  onPressed: () {
-                    bloc?.add(UpdateStatusOrder(id: order!.id));
-                  }
+            ),
+            Divider(height: 1, color: Colors.grey[400]),
+            SizedBox(height: screenHeight * 0.01),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(
+                  child: Text(
+                    'Total: \$${total.toStringAsFixed(2)}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: screenWidth * (isTablet ? 0.035 : 0.04),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: screenWidth * (isTablet ? 0.25 : 0.3),
+                  height: screenHeight * (isTablet ? 0.05 : 0.045),
+                  child: order?.status == 'PAGADO' 
+                  ? DefaultButton(
+                    text: 'DESPACHAR', 
+                    onPressed: () {
+                      bloc?.add(UpdateStatusOrder(id: order!.id));
+                    }
+                  )
+                  : Container()
                 )
-                : Container()
-              )
-            ],
-          )
-        ],
-      )
+              ],
+            ),
+            SizedBox(height: screenHeight * 0.005),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildListTile(BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required bool isTablet,
+  }) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: screenWidth * (isTablet ? 0.02 : 0.01),
+        vertical: screenWidth * (isTablet ? 0.01 : 0.005),
+      ),
+      leading: Icon(
+        icon, 
+        color: Colors.grey[400],
+        size: screenWidth * (isTablet ? 0.06 : 0.06),
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontSize: screenWidth * (isTablet ? 0.025 : 0.04),
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: TextStyle(
+          fontSize: screenWidth * (isTablet ? 0.03 : 0.035),
+        ),
+      ),
     );
   }
 }

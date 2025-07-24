@@ -36,75 +36,172 @@ class _AdminHomePageState extends State<AdminHomePage> {
       drawer: BlocBuilder<AdminHomeBloc, AdminHomeState>(
         builder: (context, state) {
           return Drawer(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black,
+                    Colors.grey[900]!,
+                  ],
+                ),
+              ),
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.25,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.black,
+                          Colors.grey[800]!,
+                        ],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(76),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Menú de Administración',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: MediaQuery.of(context).size.width > 600 
+                            ? MediaQuery.of(context).size.width * 0.03  
+                            : MediaQuery.of(context).size.width * 0.05, 
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    ),
                   ),
-                  child: Text('Menú de Administración', style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  )),
-                ),
-                ListTile(
-                  title: Text('Categorías'),
-                  selected: state.pageIndex == 0,
-                  onTap: (){
-                    _bloc?.add(AdminChangeDrawerPage(
-                      pageIndex: 0
-                      )
-                    );
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: Text('Órdenes'),
-                  selected: state.pageIndex == 1,
-                  onTap: (){
-                    _bloc?.add(AdminChangeDrawerPage(
-                      pageIndex: 1
-                      )
-                    );
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: Text('Roles'),
-                  selected: state.pageIndex == 2,
-                  onTap: (){
-                    _bloc?.add(AdminChangeDrawerPage(
-                      pageIndex: 2
-                      )
-                    );
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: Text('Perfil de Usuario'),
-                  selected: state.pageIndex == 3,
-                  onTap: (){
-                    _bloc?.add(AdminChangeDrawerPage(
-                      pageIndex: 3
-                      )
-                    );
-                    Navigator.pop(context);
-                  },
-                ),                
-                ListTile(
-                  title: Text('Cerrar Sesión'),
-                  onTap: (){
-                    _bloc?.add(AdminLogout());
-                    Navigator.pushAndRemoveUntil(
-                      context, 
-                      MaterialPageRoute(builder: (context) => MainApp()), 
-                      (route) => false
-                    );
-                  },
-                ),
-              ],
+                  
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.015), 
+                  
+                  _buildDrawerItem(
+                    context: context,
+                    icon: Icons.category,
+                    title: 'Categorías',
+                    isSelected: state.pageIndex == 0,
+                    onTap: () {
+                      _bloc?.add(AdminChangeDrawerPage(pageIndex: 0));
+                      Navigator.pop(context);
+                    },
+                  ),
+                  
+                  _buildDrawerItem(
+                    context: context,
+                    icon: Icons.shopping_bag,
+                    title: 'Órdenes',
+                    isSelected: state.pageIndex == 1,
+                    onTap: () {
+                      _bloc?.add(AdminChangeDrawerPage(pageIndex: 1));
+                      Navigator.pop(context);
+                    },
+                  ),
+                  
+                  _buildDrawerItem(
+                    context: context,
+                    icon: Icons.admin_panel_settings,
+                    title: 'Roles',
+                    isSelected: state.pageIndex == 2,
+                    onTap: () {
+                      _bloc?.add(AdminChangeDrawerPage(pageIndex: 2));
+                      Navigator.pop(context);
+                    },
+                  ),
+                  
+                  _buildDrawerItem(
+                    context: context,
+                    icon: Icons.person,
+                    title: 'Perfil',
+                    isSelected: state.pageIndex == 3,
+                    onTap: () {
+                      _bloc?.add(AdminChangeDrawerPage(pageIndex: 3));
+                      Navigator.pop(context);
+                    },
+                  ),
+                  
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                  
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.08,
+                    ),
+                    height: 1,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.transparent,
+                          Colors.grey[400]!,
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                  
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.015),
+                  
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.05,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      gradient: LinearGradient(
+                        colors: [Colors.red[700]!, Colors.red[900]!],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.red.withAlpha(76),
+                          blurRadius: 8,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.logout,
+                        color: Colors.white,
+                        size: MediaQuery.of(context).size.width > 600 
+                          ? MediaQuery.of(context).size.width * 0.04
+                          : MediaQuery.of(context).size.width * 0.06,
+                      ),
+                      title: Text(
+                        'Cerrar Sesión',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: MediaQuery.of(context).size.width > 600 
+                            ? MediaQuery.of(context).size.width * 0.025
+                            : MediaQuery.of(context).size.width * 0.04,  
+                        ),
+                      ),
+                      onTap: () {
+                        _bloc?.add(AdminLogout());
+                        Navigator.pushAndRemoveUntil(
+                          context, 
+                          MaterialPageRoute(builder:(context) => MainApp()), 
+                          (route) => false
+                        );
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                  ),
+                  
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                ],
+              ),
             ),
           );
         },
@@ -113,6 +210,62 @@ class _AdminHomePageState extends State<AdminHomePage> {
         builder: (context, state) {
           return pageList[state.pageIndex];
         }
+      ),
+    );
+  }
+
+  Widget _buildDrawerItem({
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    
+    bool isTablet = screenWidth > 600;
+    
+    return Container(
+      margin: EdgeInsets.symmetric(
+        vertical: screenHeight * 0.005,
+        horizontal: screenWidth * (isTablet ? 0.03 : 0.05),
+      ),
+      decoration: BoxDecoration(
+        color: isSelected ? Colors.grey[850] : Colors.transparent,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          if (isSelected)
+            BoxShadow(
+              color: Colors.black.withAlpha(76),
+              blurRadius: 10,
+              offset: Offset(0, 4),
+            ),
+        ],
+      ),
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: screenWidth * (isTablet ? 0.04 : 0.03), 
+          vertical: screenHeight * (isTablet ? 0.015 : 0.01), 
+        ),
+        leading: Icon(
+          icon,
+          color: isSelected ? Colors.white : Colors.grey[400],
+          size: screenWidth * (isTablet ? 0.04 : 0.06),
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            color: isSelected ? Colors.white : Colors.grey[400],
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            fontSize: screenWidth * (isTablet ? 0.025 : 0.04),
+            letterSpacing: isTablet ? 0.5 : 0,
+          ),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
+        selected: isSelected,
+        onTap: onTap,
       ),
     );
   }

@@ -30,18 +30,24 @@ class _AdminCategoryListPageState extends State<AdminCategoryListPage> {
   @override
   Widget build(BuildContext context) {
     _bloc = BlocProvider.of<AdminCategoryListBloc>(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, 'admin/category/create');
-        },
-        tooltip: 'Create Category',
-        backgroundColor: Colors.black,
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
+      floatingActionButton: SizedBox(
+        width: screenWidth * (isTablet ? 0.12 : 0.18),
+        height: screenWidth * (isTablet ? 0.12 : 0.18),
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, 'admin/category/create');
+          },
+          tooltip: 'Create Category',
+          backgroundColor: Colors.black,
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+            size: screenWidth * (isTablet ? 0.06 : 0.08),
+          ),
         ),
-
       ),
       body: BlocListener<AdminCategoryListBloc, AdminCategoryListState>(
         listener: (context, state){

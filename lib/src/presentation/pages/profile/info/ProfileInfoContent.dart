@@ -8,13 +8,16 @@ class ProfileInfoContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Stack(
       alignment: Alignment.center,
       children: [
         _imageBackground(context),
         Column(
           children: [
-            _imageProfile(),
+            _imageProfile(context),
             Spacer(),
             _cardProfileInfo(context)
           ],
@@ -34,10 +37,13 @@ class ProfileInfoContent extends StatelessWidget {
     );
   }
 
-  Widget _imageProfile(){
+  Widget _imageProfile(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Container(
-      margin: EdgeInsets.only(top: 100),
-      width: 150,
+      margin: EdgeInsets.only(top: screenWidth * (isTablet ? 0.15 : 0.25)),
+      width: screenWidth * (isTablet ? 0.40 : 0.4),
       child: AspectRatio(
         aspectRatio: 1/1,
         child: ClipOval(
@@ -54,6 +60,9 @@ class ProfileInfoContent extends StatelessWidget {
   }
 
   Widget _cardProfileInfo(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.35,
@@ -65,36 +74,108 @@ class ProfileInfoContent extends StatelessWidget {
         ),
       ),
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          children: [
-            ListTile(
-              title:Text('${user?.name ?? ''} ${user?.lastname ?? ''}' ),
-              subtitle: Text('Nombre de Usuario'),
-              leading: Icon(Icons.person, color: Colors.black),
-            ),
-            ListTile(
-              title:Text(user?.email ?? ''),
-              subtitle: Text('Correo del Usuario'),
-              leading: Icon(Icons.email, color: Colors.black),
-            ),
-            ListTile(
-              title:Text(user?.phone ?? ''),
-              subtitle: Text('Teléfono del Usuario'),
-              leading: Icon(Icons.phone, color: Colors.black),
-            ),
-            Container(
-              alignment: Alignment.centerRight,
-              margin: EdgeInsets.only(right: 20, bottom: 20),
-              child: FloatingActionButton(
-                backgroundColor: Colors.black,
-                onPressed: (){
-                  Navigator.pushNamed(context, 'profile/update', arguments: user);
-                },
-                child: Icon(Icons.edit, color: Colors.white),
+        margin: EdgeInsets.symmetric(
+          horizontal: screenWidth * (isTablet ? 0.1 : 0.04),
+          vertical: screenWidth * (isTablet ? 0.05 : 0.04),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 0,
+                  vertical: screenWidth * (isTablet ? 0.005 : 0.002),
+                ),
+                title: Text(
+                  '${user?.name ?? ''} ${user?.lastname ?? ''}',
+                  style: TextStyle(
+                    fontSize: screenWidth * (isTablet ? 0.03 : 0.045),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(
+                  'Nombre de Usuario',
+                  style: TextStyle(
+                    fontSize: screenWidth * (isTablet ? 0.025 : 0.035),
+                  ),
+                ),
+                leading: Icon(
+                  Icons.person, 
+                  color: Colors.black,
+                  size: screenWidth * (isTablet ? 0.04 : 0.06),
+                ),
               ),
-            ),
-          ],
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 0,
+                  vertical: screenWidth * (isTablet ? 0.005 : 0.002),
+                ),
+                title: Text(
+                  user?.email ?? '',
+                  style: TextStyle(
+                    fontSize: screenWidth * (isTablet ? 0.03 : 0.045),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(
+                  'Correo del Usuario',
+                  style: TextStyle(
+                    fontSize: screenWidth * (isTablet ? 0.025 : 0.035),
+                  ),
+                ),
+                leading: Icon(
+                  Icons.email, 
+                  color: Colors.black,
+                  size: screenWidth * (isTablet ? 0.04 : 0.06),
+                ),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 0,
+                  vertical: screenWidth * (isTablet ? 0.005 : 0.002),
+                ),
+                title: Text(
+                  user?.phone ?? '',
+                  style: TextStyle(
+                    fontSize: screenWidth * (isTablet ? 0.03 : 0.045),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(
+                  'Teléfono del Usuario',
+                  style: TextStyle(
+                    fontSize: screenWidth * (isTablet ? 0.025 : 0.035),
+                  ),
+                ),
+                leading: Icon(
+                  Icons.phone, 
+                  color: Colors.black,
+                  size: screenWidth * (isTablet ? 0.04 : 0.06),
+                ),
+              ),
+              Container(
+                alignment: Alignment.centerRight,
+                margin: EdgeInsets.only(
+                  bottom: screenWidth * (isTablet ? 0.03 : 0.02),
+                ),
+                child: SizedBox(
+                  width: screenWidth * (isTablet ? 0.12 : 0.15),
+                  height: screenWidth * (isTablet ? 0.12 : 0.15),
+                  child: FloatingActionButton(
+                    backgroundColor: Colors.black,
+                    onPressed: (){
+                      Navigator.pushNamed(context, 'profile/update', arguments: user);
+                    },
+                    child: Icon(
+                      Icons.edit, 
+                      color: Colors.white,
+                      size: screenWidth * (isTablet ? 0.05 : 0.06),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

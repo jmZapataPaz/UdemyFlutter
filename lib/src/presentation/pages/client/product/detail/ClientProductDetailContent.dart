@@ -8,7 +8,6 @@ import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 
 class ClientProductDetailContent extends StatelessWidget {
 
-
   Product? product;
   ClientProductDetailBloc? _bloc;
   ClientProductDetailState state;
@@ -22,10 +21,10 @@ class ClientProductDetailContent extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-              _imageSlideShow(),
-              _textoProductName(),
-              _textoProductDescription(),
-              _textoProductPrice(),
+              _imageSlideShow(context),
+              _textoProductName(context),
+              _textoProductDescription(context),
+              _textoProductPrice(context),
               Spacer(),
               Divider(
                 color: Colors.grey[200],
@@ -39,49 +38,71 @@ class ClientProductDetailContent extends StatelessWidget {
     );
   }
 
-
-  Widget _textoProductName(){
+  Widget _textoProductName(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Container(
-      padding: EdgeInsets.only(left: 30, top: 30),
+      padding: EdgeInsets.only(
+        left: screenWidth * (isTablet ? 0.05 : 0.08), 
+        top: screenWidth * (isTablet ? 0.04 : 0.08)
+      ),
       child: Text(
         product != null ? product!.name : 'No Product',
         style: TextStyle(
-          fontSize: 20,
+          fontSize: screenWidth * (isTablet ? 0.045 : 0.055),
           fontWeight: FontWeight.bold,
         ),
       ),
     );
   }
 
-  Widget _textoProductDescription(){
+  Widget _textoProductDescription(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Container(
-      padding: EdgeInsets.only(left: 30, top: 15),
+      padding: EdgeInsets.only(
+        left: screenWidth * (isTablet ? 0.05 : 0.08), 
+        top: screenWidth * (isTablet ? 0.02 : 0.04),
+        right: screenWidth * (isTablet ? 0.05 : 0.08)
+      ),
       child: Text(
         product != null ? product!.description : 'No Description',
         style: TextStyle(
-          fontSize: 16,
+          fontSize: screenWidth * (isTablet ? 0.035 : 0.042),
         ),
       ),
     );
   }
 
-  Widget _textoProductPrice(){
+  Widget _textoProductPrice(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Container(
-      padding: EdgeInsets.only(left: 30, top: 15),
+      padding: EdgeInsets.only(
+        left: screenWidth * (isTablet ? 0.05 : 0.08), 
+        top: screenWidth * (isTablet ? 0.02 : 0.04)
+      ),
       child: Text(
         product != null ? 'Precio: \$${product!.price.toString()}' : 'No Price',
         style: TextStyle(
-          fontSize: 17,
+          fontSize: screenWidth * (isTablet ? 0.04 : 0.047),
           fontWeight: FontWeight.bold,
+          color: Colors.green,
         ),
       ),
     );
   }
 
-  Widget _imageSlideShow(){
+  Widget _imageSlideShow(BuildContext context){
+    final screenHeight = MediaQuery.of(context).size.height;
+    bool isTablet = MediaQuery.of(context).size.width > 600;
+    
     return ImageSlideshow(
       width: double.infinity,
-      height: 300,
+      height: screenHeight * (isTablet ? 0.4 : 0.35),
       initialPage: 0,
       indicatorColor: Colors.blue,
       indicatorBackgroundColor: Colors.grey,
@@ -111,10 +132,19 @@ class ClientProductDetailContent extends StatelessWidget {
   }
 
   Widget _actionsShoppingBag(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    bool isTablet = screenWidth > 600;
+    
     return Container(
       color: Colors.grey[200],
       width: double.infinity,
-      padding: EdgeInsets.only(left: 30, right: 30, bottom: 20, top: 20),
+      padding: EdgeInsets.only(
+        left: screenWidth * (isTablet ? 0.05 : 0.08), 
+        right: screenWidth * (isTablet ? 0.05 : 0.08), 
+        bottom: screenHeight * (isTablet ? 0.03 : 0.025), 
+        top: screenHeight * (isTablet ? 0.03 : 0.025)
+      ),
       child: Row(
         children: [
           GestureDetector(
@@ -122,8 +152,8 @@ class ClientProductDetailContent extends StatelessWidget {
               _bloc?.add(SubTractItem());
             },
             child: Container(
-              width: 40,
-              height: MediaQuery.of(context).size.height*0.055,
+              width: screenWidth * (isTablet ? 0.08 : 0.1),
+              height: screenHeight * (isTablet ? 0.07 : 0.055),
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: Colors.grey[300],
@@ -135,14 +165,14 @@ class ClientProductDetailContent extends StatelessWidget {
               child: Text('-',
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 25,
+                  fontSize: screenWidth * (isTablet ? 0.05 : 0.065),
                 ),
               ),
             ),
           ),
           Container(
-            width: 40,
-            height: MediaQuery.of(context).size.height*0.055,
+            width: screenWidth * (isTablet ? 0.08 : 0.1),
+            height: screenHeight * (isTablet ? 0.07 : 0.055),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: Colors.grey[300],
@@ -150,7 +180,7 @@ class ClientProductDetailContent extends StatelessWidget {
             child: Text(state.quantity.toString(),
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 25,
+                fontSize: screenWidth * (isTablet ? 0.05 : 0.065),
               ),
             ),
           ),
@@ -159,8 +189,8 @@ class ClientProductDetailContent extends StatelessWidget {
               _bloc?.add(AddItem());
             },
             child: Container(
-              width: 40,
-              height: MediaQuery.of(context).size.height*0.055,
+              width: screenWidth * (isTablet ? 0.08 : 0.1),
+              height: screenHeight * (isTablet ? 0.07 : 0.055),
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: Colors.grey[300],
@@ -172,15 +202,15 @@ class ClientProductDetailContent extends StatelessWidget {
               child: Text('+',
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 25,
+                  fontSize: screenWidth * (isTablet ? 0.05 : 0.065),
                 ),
               ),
             ),
           ),
           Spacer(),
           Container(
-            width: MediaQuery.of(context).size.width*0.4,
-            height: MediaQuery.of(context).size.height*0.055,
+            width: screenWidth * (isTablet ? 0.3 : 0.4),
+            height: screenHeight * (isTablet ? 0.07 : 0.055),
             child: DefaultButton(
               text: 'Agregar', 
               onPressed: () { 
@@ -194,7 +224,4 @@ class ClientProductDetailContent extends StatelessWidget {
       ),
     );
   }
-
-
-  
 }

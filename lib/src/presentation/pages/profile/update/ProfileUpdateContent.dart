@@ -16,6 +16,9 @@ class ProfileUpdateContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Form(
       key: state.formKey,
       child: Stack(
@@ -26,19 +29,18 @@ class ProfileUpdateContent extends StatelessWidget {
             child: Container(
               height: MediaQuery.of(context).size.height,
               child: Column(
-                mainAxisAlignment:  MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _imageProfile(context), 
-                  //Spacer(),
                   _cardProfileInfo(context)
                 ],
               ),
             ),
           ),
-        DefaultIconBack(
-          left: MediaQuery.of(context).size.width * 0.05, // 5% del ancho de pantalla
-          top: MediaQuery.of(context).padding.top + 10,
-        ),
+          DefaultIconBack(
+            left: screenWidth * 0.05, 
+            top: MediaQuery.of(context).padding.top + 10,
+          ),
         ],
       ),
     );
@@ -56,6 +58,9 @@ class ProfileUpdateContent extends StatelessWidget {
   }
 
   Widget _imageProfile(BuildContext context){ 
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return GestureDetector(
       onTap: () {
         SelectOptionImageDialog(
@@ -65,8 +70,8 @@ class ProfileUpdateContent extends StatelessWidget {
         );
       },
       child: Container(
-        margin: EdgeInsets.only(top: 100),
-        width: 150,
+        margin: EdgeInsets.only(top: screenWidth * (isTablet ? 0.15 : 0.25)),
+        width: screenWidth * (isTablet ? 0.40 : 0.4),
         child: AspectRatio(
           aspectRatio: 1/1,
           child: ClipOval(
@@ -87,6 +92,9 @@ class ProfileUpdateContent extends StatelessWidget {
   }
 
   Widget _cardProfileInfo(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.44,
@@ -98,100 +106,140 @@ class ProfileUpdateContent extends StatelessWidget {
         ),
       ),
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          children: [
-            _textUpdateInfo(),
-            _textFieldName(),
-            _textFieldLastName(),
-            _textFieldPhone(),
-            _fabSubmit(),
-            
-          ],
+        margin: EdgeInsets.symmetric(
+          horizontal: screenWidth * (isTablet ? 0.1 : 0.05), 
+          vertical: screenWidth * (isTablet ? 0.05 : 0.08),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _textUpdateInfo(context),
+              _textFieldName(context),
+              _textFieldLastName(context),
+              _textFieldPhone(context),
+              _fabSubmit(context),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _fabSubmit(){
+  Widget _fabSubmit(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Container(
       alignment: Alignment.centerRight,
-      margin: EdgeInsets.only(right: 20, top: 20),
-      child: FloatingActionButton(
-        backgroundColor: Colors.black,
-        onPressed: (){
-          bloc?.add(ProfileUpdateFormSubmitted());
-        },
-        child: Icon(Icons.check, color: Colors.white),
-      ),
-    );
-  }
 
-  Widget _textUpdateInfo(){
-      return Container(
-        alignment: Alignment.centerLeft,
-        margin: EdgeInsets.only(top: 25, left: 15, bottom: 10),
-        child: Text(
-          'Actualizar Información',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+      child: SizedBox(
+        width: screenWidth * (isTablet ? 0.12 : 0.15),
+        height: screenWidth * (isTablet ? 0.12 : 0.15),
+        child: FloatingActionButton(
+          backgroundColor: Colors.black,
+          onPressed: (){
+            bloc?.add(ProfileUpdateFormSubmitted());
+          },
+          child: Icon(
+            Icons.check, 
+            color: Colors.white,
+            size: screenWidth * (isTablet ? 0.05 : 0.06),
           ),
-        )
-      );
-    }
-
-    Widget _textFieldName(){
-    return Container( 
-      margin: EdgeInsets.only(left: 15, right: 15),
-      child: DefaultTextField(
-        label: "Nombre", 
-        color: Colors.black,
-        icon: Icons.person, 
-        initialValue: user?.name ?? '',
-        onChanded: (text){
-          bloc?.add(ProfileUpdateNameChanged(name: BlocFormItem(value: text)));
-        },
-        validator: (value){
-          return state.name.error;
-        },                   
+        ),
       ),
     );
   }
 
-  Widget _textFieldLastName(){
-    return Container( 
-      margin: EdgeInsets.only(left: 15, right: 15),
-      child: DefaultTextField(
-        label: "Apellido", 
-        color: Colors.black,
-        icon: Icons.person_outline, 
-        initialValue: user?.lastname ?? '',
-        onChanded: (text){
-          bloc?.add(ProfileUpdateLastNameChanged(lastname: BlocFormItem(value: text)));
-        },
-        validator: (value){
-          return state.lastname.error;
-        },                    
-      ),
-    );
-  }
-
-  Widget _textFieldPhone(){
+  Widget _textUpdateInfo(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15),
-      child: DefaultTextField(
-        label: "Teléfono", 
-        color: Colors.black,
-        icon: Icons.phone, 
-        initialValue: user?.phone ?? '',
-        onChanded: (text){
-          bloc?.add(ProfileUpdatePhoneChanged(phone: BlocFormItem(value: text)));
-        },
-        validator: (value){
-          return state.phone.error;
-        },                     
+      alignment: Alignment.center,
+      margin: EdgeInsets.only(
+        top: screenWidth * (isTablet ? 0.05 : 0.06), 
+        bottom: screenWidth * (isTablet ? 0.025 : 0.03),
+      ),
+      child: Text(
+        'Actualizar Información',
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: screenWidth * (isTablet ? 0.04 : 0.05),
+          fontWeight: FontWeight.bold,
+        ),
+      )
+    );
+  }
+
+  Widget _textFieldName(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: screenWidth * (isTablet ? 0.02 : 0.025)),
+      child: Transform.scale(
+        scale: isTablet ? 1.15 : 1.0,
+        child: DefaultTextField(
+          label: "Nombre", 
+          color: Colors.black,
+          icon: Icons.person, 
+          initialValue: user?.name ?? '',
+          onChanded: (text){
+            bloc?.add(ProfileUpdateNameChanged(name: BlocFormItem(value: text)));
+          },
+          validator: (value){
+            return state.name.error;
+          },                   
+        ),
+      ),
+    );
+  }
+
+  Widget _textFieldLastName(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: screenWidth * (isTablet ? 0.02 : 0.025)),
+      child: Transform.scale(
+        scale: isTablet ? 1.15 : 1.0,
+        child: DefaultTextField(
+          label: "Apellido", 
+          color: Colors.black,
+          icon: Icons.person_outline, 
+          initialValue: user?.lastname ?? '',
+          onChanded: (text){
+            bloc?.add(ProfileUpdateLastNameChanged(lastname: BlocFormItem(value: text)));
+          },
+          validator: (value){
+            return state.lastname.error;
+          },                    
+        ),
+      ),
+    );
+  }
+
+  Widget _textFieldPhone(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: screenWidth * (isTablet ? 0.02 : 0.025)),
+      child: Transform.scale(
+        scale: isTablet ? 1.15 : 1.0,
+        child: DefaultTextField(
+          label: "Teléfono", 
+          color: Colors.black,
+          icon: Icons.phone, 
+          initialValue: user?.phone ?? '',
+          onChanded: (text){
+            bloc?.add(ProfileUpdatePhoneChanged(phone: BlocFormItem(value: text)));
+          },
+          validator: (value){
+            return state.phone.error;
+          },                     
+        ),
       ),
     );
   }

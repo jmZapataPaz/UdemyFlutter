@@ -32,26 +32,34 @@ class _AdminProductListPageState extends State<AdminProductListPage> {
       _initialized = true;
     }
     
+    final isTablet = MediaQuery.of(context).size.width > 600;
+    final screenWidth = MediaQuery.of(context).size.width;
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('Productos - ${category?.name ?? "Categoría"}'),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, 'admin/product/create', arguments: category)
-              .then((value) {
-            if (category != null) {
-              _bloc?.add(GetProductsByCategory(id_category: category!.id!));
-            }
-          });
-        },
-        tooltip: 'Crear Producto',
-        backgroundColor: Colors.black,
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
+      floatingActionButton: SizedBox(
+        width: screenWidth * (isTablet ? 0.12 : 0.18),
+        height: screenWidth * (isTablet ? 0.12 : 0.18),
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, 'admin/product/create', arguments: category)
+                .then((value) {
+              if (category != null) {
+                _bloc?.add(GetProductsByCategory(id_category: category!.id!));
+              }
+            });
+          },
+          tooltip: 'Crear Producto',
+          backgroundColor: Colors.black,
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+            size: screenWidth * (isTablet ? 0.06 : 0.08),
+          ),
         ),
       ),
       body: BlocListener<AdminProductListBloc, AdminProductListState>(

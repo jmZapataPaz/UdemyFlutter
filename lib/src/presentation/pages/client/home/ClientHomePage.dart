@@ -72,49 +72,27 @@ class _ClientHomePageState extends State<ClientHomePage> {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
+                          color: Colors.black,
                           blurRadius: 10,
                           offset: Offset(0, 5),
                         ),
                       ],
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.2,
-                          height: MediaQuery.of(context).size.width * 0.2,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.3),
-                                blurRadius: 10,
-                                offset: Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: Icon(
-                            Icons.person,
-                            size: MediaQuery.of(context).size.width * 0.1,
-                            color: Colors.black,
-                          ),
+                    child: Center(
+                      child: Text(
+                        'Menú de Cliente',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: MediaQuery.of(context).size.width > 600 
+                            ? MediaQuery.of(context).size.width * 0.03  
+                            : MediaQuery.of(context).size.width * 0.05, 
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.2,
                         ),
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                        Text(
-                          'Menú de Cliente',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: MediaQuery.of(context).size.width * 0.05,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.2,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.015), 
                   _buildDrawerItem(
                     context: context,
                     icon: Icons.category,
@@ -138,7 +116,7 @@ class _ClientHomePageState extends State<ClientHomePage> {
                   _buildDrawerItem(
                     context: context,
                     icon: Icons.person,
-                    title: 'Perfil de Usuario',
+                    title: 'Perfil',
                     isSelected: state.pageIndex == 2,
                     onTap: () {
                       _bloc?.add(ChangeDrawerPage(pageIndex: 2));
@@ -155,7 +133,7 @@ class _ClientHomePageState extends State<ClientHomePage> {
                       Navigator.pop(context);
                     },
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.03), 
                   Container(
                     margin: EdgeInsets.symmetric(
                       horizontal: MediaQuery.of(context).size.width * 0.08,
@@ -171,9 +149,7 @@ class _ClientHomePageState extends State<ClientHomePage> {
                       ),
                     ),
                   ),
-                  
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                  
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.015), 
                   Container(
                     margin: EdgeInsets.symmetric(
                       horizontal: MediaQuery.of(context).size.width * 0.05,
@@ -185,7 +161,7 @@ class _ClientHomePageState extends State<ClientHomePage> {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.red.withOpacity(0.3),
+                          color: Colors.red.withAlpha(76),
                           blurRadius: 8,
                           offset: Offset(0, 3),
                         ),
@@ -195,14 +171,18 @@ class _ClientHomePageState extends State<ClientHomePage> {
                       leading: Icon(
                         Icons.logout,
                         color: Colors.white,
-                        size: MediaQuery.of(context).size.width * 0.06,
+                        size: MediaQuery.of(context).size.width > 600 
+                          ? MediaQuery.of(context).size.width * 0.04
+                          : MediaQuery.of(context).size.width * 0.06,
                       ),
                       title: Text(
                         'Cerrar Sesión',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
-                          fontSize: MediaQuery.of(context).size.width * 0.04,
+                          fontSize: MediaQuery.of(context).size.width > 600 
+                            ? MediaQuery.of(context).size.width * 0.025
+                            : MediaQuery.of(context).size.width * 0.04,  
                         ),
                       ),
                       onTap: () {
@@ -218,8 +198,7 @@ class _ClientHomePageState extends State<ClientHomePage> {
                       ),
                     ),
                   ),
-                  
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.02), 
                 ]
               ),
             ),
@@ -241,10 +220,13 @@ class _ClientHomePageState extends State<ClientHomePage> {
     required bool isSelected,
     required VoidCallback onTap,
   }) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    bool isTablet = screenWidth > 600;
     return Container(
       margin: EdgeInsets.symmetric(
-        vertical: MediaQuery.of(context).size.height * 0.005,
-        horizontal: MediaQuery.of(context).size.width * 0.05,
+        vertical: screenHeight * 0.005,
+        horizontal: screenWidth * (isTablet ? 0.03 : 0.05), 
       ),
       decoration: BoxDecoration(
         color: isSelected ? Colors.grey[850] : Colors.transparent,
@@ -252,25 +234,32 @@ class _ClientHomePageState extends State<ClientHomePage> {
         boxShadow: [
           if (isSelected)
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withAlpha(76),
               blurRadius: 10,
               offset: Offset(0, 4),
             ),
         ],
       ),
       child: ListTile(
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: screenWidth * (isTablet ? 0.04 : 0.03), 
+          vertical: screenHeight * (isTablet ? 0.015 : 0.01), 
+        ),
         leading: Icon(
           icon,
           color: isSelected ? Colors.white : Colors.grey[400],
-          size: MediaQuery.of(context).size.width * 0.06,
+          size: screenWidth * (isTablet ? 0.04 : 0.06),
         ),
         title: Text(
           title,
           style: TextStyle(
             color: isSelected ? Colors.white : Colors.grey[400],
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            fontSize: MediaQuery.of(context).size.width * 0.04,
+            fontSize: screenWidth * (isTablet ? 0.025 : 0.04), 
+            letterSpacing: isTablet ? 0.5 : 0, 
           ),
+          overflow: TextOverflow.ellipsis, 
+          maxLines: 1, 
         ),
         onTap: onTap,
       ),
