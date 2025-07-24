@@ -45,74 +45,184 @@ class _ClientHomePageState extends State<ClientHomePage> {
       drawer: BlocBuilder<ClientHomeBloc, ClientHomeState>(
         builder: (context, state){
           return Drawer(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                  ),
-                  child: Text(
-                    'Menú de Cliente',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black,
+                    Colors.grey[900]!,
+                  ],
+                ),
+              ),
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.25,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.black,
+                          Colors.grey[800]!,
+                        ],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
                     ),
-                  )
-                ),
-                ListTile(
-                  title: Text('Categorias'),
-                  selected: state.pageIndex == 0,
-                  onTap: () {
-                    _bloc?.add(ChangeDrawerPage(
-                      pageIndex: 0
-                    ));
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: Text('Mis pedidos'),
-                  selected: state.pageIndex == 1,
-                  onTap: () {
-                    _bloc?.add(ChangeDrawerPage(pageIndex: 1));
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: Text('Perfil de Usuario'),
-                  selected: state.pageIndex == 2,
-                  onTap: () {
-                    _bloc?.add(ChangeDrawerPage(
-                      pageIndex: 2
-                    ));
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: Text('Roles'),
-                  selected: state.pageIndex == 3,
-                  onTap: () {
-                    _bloc?.add(ChangeDrawerPage(
-                      pageIndex: 3
-                    ));
-                    Navigator.pop(context);
-                  },
-                ),
-                
-                ListTile(
-                  title: Text('Cerrar Sesión'),
-                  onTap: () {
-                    _bloc?.add(Logout());
-                    Navigator.pushAndRemoveUntil(
-                      context, 
-                      MaterialPageRoute(builder:(context) => MainApp()), 
-                      (route) => false
-                    );
-                  },
-                )
-              ]
-            )
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          height: MediaQuery.of(context).size.width * 0.2,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.3),
+                                blurRadius: 10,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Icon(
+                            Icons.person,
+                            size: MediaQuery.of(context).size.width * 0.1,
+                            color: Colors.black,
+                          ),
+                        ),
+                        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                        Text(
+                          'Menú de Cliente',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: MediaQuery.of(context).size.width * 0.05,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                  _buildDrawerItem(
+                    context: context,
+                    icon: Icons.category,
+                    title: 'Categorías',
+                    isSelected: state.pageIndex == 0,
+                    onTap: () {
+                      _bloc?.add(ChangeDrawerPage(pageIndex: 0));
+                      Navigator.pop(context);
+                    },
+                  ),
+                  _buildDrawerItem(
+                    context: context,
+                    icon: Icons.shopping_bag,
+                    title: 'Mis pedidos',
+                    isSelected: state.pageIndex == 1,
+                    onTap: () {
+                      _bloc?.add(ChangeDrawerPage(pageIndex: 1));
+                      Navigator.pop(context);
+                    },
+                  ),
+                  _buildDrawerItem(
+                    context: context,
+                    icon: Icons.person,
+                    title: 'Perfil de Usuario',
+                    isSelected: state.pageIndex == 2,
+                    onTap: () {
+                      _bloc?.add(ChangeDrawerPage(pageIndex: 2));
+                      Navigator.pop(context);
+                    },
+                  ),
+                  _buildDrawerItem(
+                    context: context,
+                    icon: Icons.admin_panel_settings,
+                    title: 'Roles',
+                    isSelected: state.pageIndex == 3,
+                    onTap: () {
+                      _bloc?.add(ChangeDrawerPage(pageIndex: 3));
+                      Navigator.pop(context);
+                    },
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.08,
+                    ),
+                    height: 1,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.transparent,
+                          Colors.grey[400]!,
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                  
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                  
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.05,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      gradient: LinearGradient(
+                        colors: [Colors.red[700]!, Colors.red[900]!],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.red.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.logout,
+                        color: Colors.white,
+                        size: MediaQuery.of(context).size.width * 0.06,
+                      ),
+                      title: Text(
+                        'Cerrar Sesión',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: MediaQuery.of(context).size.width * 0.04,
+                        ),
+                      ),
+                      onTap: () {
+                        _bloc?.add(Logout());
+                        Navigator.pushAndRemoveUntil(
+                          context, 
+                          MaterialPageRoute(builder:(context) => MainApp()), 
+                          (route) => false
+                        );
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                  ),
+                  
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                ]
+              ),
+            ),
           );
         }
       ),
@@ -120,6 +230,49 @@ class _ClientHomePageState extends State<ClientHomePage> {
         builder: (context, state) {
           return pageList[state.pageIndex];
         }
+      ),
+    );
+  }
+
+  Widget _buildDrawerItem({
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      margin: EdgeInsets.symmetric(
+        vertical: MediaQuery.of(context).size.height * 0.005,
+        horizontal: MediaQuery.of(context).size.width * 0.05,
+      ),
+      decoration: BoxDecoration(
+        color: isSelected ? Colors.grey[850] : Colors.transparent,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          if (isSelected)
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 10,
+              offset: Offset(0, 4),
+            ),
+        ],
+      ),
+      child: ListTile(
+        leading: Icon(
+          icon,
+          color: isSelected ? Colors.white : Colors.grey[400],
+          size: MediaQuery.of(context).size.width * 0.06,
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            color: isSelected ? Colors.white : Colors.grey[400],
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            fontSize: MediaQuery.of(context).size.width * 0.04,
+          ),
+        ),
+        onTap: onTap,
       ),
     );
   }

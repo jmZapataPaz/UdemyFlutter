@@ -8,34 +8,50 @@ class ClientShoppingBagBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    
     return Container(
-      height: MediaQuery.of(context).size.height * 0.10,
+      height: screenHeight * 0.12,
       color: Colors.grey[300],
       child: Column(
         children: [
-          Divider(color: Colors.grey[400], height: 0,),
-          SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text('Total: \$${state.total.toStringAsFixed(2)}', 
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+          Container(
+            width: double.infinity, 
+            height: 1,
+            color: Colors.grey[400],
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.05,
+                vertical: screenHeight * 0.015,
               ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.4,
-                
-                child: DefaultButton(
-                  text: 'Confirmar orden', 
-                  onPressed: (){
-                    Navigator.pushNamed(context, 'client/address/list');
-                  }
-                ),
-              )
-            ],
-          )
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Total: \$${state.total.toString()}', 
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.045,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Container(
+                    width: screenWidth * 0.4,
+                    height: screenHeight * 0.055,
+                    child: DefaultButton(
+                      text: 'Confirmar orden', 
+                      onPressed: (){
+                        Navigator.pushNamed(context, 'client/address/list');
+                      }
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

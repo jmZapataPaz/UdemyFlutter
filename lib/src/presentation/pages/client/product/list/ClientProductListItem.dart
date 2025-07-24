@@ -28,6 +28,7 @@ class ClientProductListItem extends StatelessWidget {
         title: Text(product != null ? product!.name : 'No Product', 
           style: TextStyle(
             fontWeight: FontWeight.bold,
+            fontSize: 16,
           ),
         ),
         subtitle: Column(

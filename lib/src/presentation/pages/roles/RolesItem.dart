@@ -15,7 +15,7 @@ class RolesItem extends StatelessWidget {
         children: [
           Container(
             margin: EdgeInsets.only(bottom: 15, top: 15),
-            height: 100,
+            height: MediaQuery.of(context).size.height * 0.15,
             child: FadeInImage(
               image: NetworkImage(role.image),
               fit: BoxFit.contain,
@@ -26,7 +26,7 @@ class RolesItem extends StatelessWidget {
           Text(
             role.name ?? '',
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.black
             ),

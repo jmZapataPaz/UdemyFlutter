@@ -41,7 +41,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               children: [
                 DrawerHeader(
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: Colors.black,
                   ),
                   child: Text('Menú de Administración', style: TextStyle(
                     color: Colors.white,

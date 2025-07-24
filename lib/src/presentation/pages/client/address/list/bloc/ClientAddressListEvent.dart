@@ -58,16 +58,8 @@ class OnPaymentStripeSubmit extends ClientAddressListEvent {
 }
 
 class CreateOrderEvent extends ClientAddressListEvent {
-  final int idUser;
-  final int idAddress;
-  final List<Map<String, dynamic>> products;
-
-  const CreateOrderEvent({
-    required this.idUser,
-    required this.idAddress,
-    required this.products,
-  });
+  const CreateOrderEvent(); 
 
   @override
-  List<Object?> get props => [idUser, idAddress, products];
+  List<Object?> get props => [];
 }

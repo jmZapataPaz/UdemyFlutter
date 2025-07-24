@@ -73,11 +73,6 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
               );
               final shoppingBagUseCases = locator<ShoppingBagUseCases>();
               shoppingBagUseCases.deleteShoppingBagUseCase.run();
-              Navigator.pushNamedAndRemoveUntil(
-                context, 
-                'client/payment/success', 
-                (route) => false
-              );
             }
           }
           if(responseState is Error){

@@ -144,15 +144,15 @@ class RegisterContent extends StatelessWidget {
                     ],
                   ),
                 ),
+                Positioned(
+                    top: MediaQuery.of(context).size.height * 0.02,
+                    left: MediaQuery.of(context).size.width * 0.04,
+                  child: DefaultIconBack(
+                    left: 0,
+                    top: 0,
+                  ),
+                ),
               ],
-            ),
-          ),
-          Positioned(
-            top: MediaQuery.of(context).padding.top + 10,
-            left: MediaQuery.of(context).size.width * 0.05,
-            child: DefaultIconBack(
-              left: 0,
-              top: 0,
             ),
           ),
         ],

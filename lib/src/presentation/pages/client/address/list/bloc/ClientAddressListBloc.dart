@@ -27,7 +27,6 @@ class ClientAddressListBloc extends Bloc<ClientAddressListEvent, ClientAddressLi
     on<SetAddressSession>(_onSetAddressSession);
     on<DeleteAddress>(_onDeleteAddress);
     on<OnPaymentStripeSubmit>(_onPaymentStripeSubmit);
-    on<CreateOrderEvent>(_onCreateOrderEvent);
   }
 
 
@@ -101,10 +100,12 @@ class ClientAddressListBloc extends Bloc<ClientAddressListEvent, ClientAddressLi
     final response = await http.post(
       Uri.parse('https://${ApiConfig.NGROK_URL}/payment_stripe/create'),
     );
+    
     if(response.statusCode == 200) {
       final url = jsonDecode(response.body)['checkout_url'];
       if (await canLaunchUrl(Uri.parse(url))){
         await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+        await _waitAndVerifyPayment(emit);
       }
       else {
         throw 'Could not launch $url';
@@ -113,54 +114,68 @@ class ClientAddressListBloc extends Bloc<ClientAddressListEvent, ClientAddressLi
     else{
       throw 'Failed to create payment session: ${response.statusCode}';
     }
+  }
 
-    if(response.statusCode == 200) {
+  Future<void> _waitAndVerifyPayment(Emitter<ClientAddressListState> emit) async {
+    await Future.delayed(Duration(seconds: 10));
+    int attempts = 0;
+    const maxAttempts = 12; 
+    
+    while (attempts < maxAttempts) {
+      try {
+        final verifyResponse = await http.get(
+          Uri.parse('https://${ApiConfig.NGROK_URL}/payment_stripe/success'),
+        );
+        
+        if (verifyResponse.statusCode == 200) {
+          await _createOrderAfterPayment(emit);
+          return; 
+        }
+        
+        attempts++;
+        if (attempts < maxAttempts) {
+          await Future.delayed(Duration(seconds: 10));
+        }
+        
+      } catch (e) {
+        attempts++;
+        await Future.delayed(Duration(seconds: 10));
+      }
+    }
+    emit(state.copyWith(response: Error('Tiempo agotado esperando el pago')));
+  }
+  Future<void> _createOrderAfterPayment(Emitter<ClientAddressListState> emit) async {
+    emit(state.copyWith(response: Loading()));
+
+    try {
       final userSession = await authUseCases.getUserSession.run();
       final selectedAddress = await addressUseCase.getAddressSesionUseCase.run();
       final shoppingBagUseCases = locator<ShoppingBagUseCases>();
       final products = await shoppingBagUseCases.getProductShoppingBagUseCase.run();
+      
       final productsList = products.map<Map<String, dynamic>>((p) => {
         "id": p.id,
         "quantity": p.quantity ?? 1,
       }).toList();
+
       final order = Order(
         id: 0,
         idClient: userSession.user.id,
         idAddress: selectedAddress!.id!,
-        status: "CREADO",
+        status: "PAGADO", 
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
         user: null,
         address: null,
         orderHasProducts: null,
-        productsToCreate: productsList,
+        productsToCreate: productsList, 
       );
+
+      final response = await ordersUseCases.createOrder.run(order);
+      emit(state.copyWith(response: response));
       
-      final orderResponse = await ordersUseCases.createOrder.run(order);
-      emit(state.copyWith(response: orderResponse));
-    } else {
-      throw 'Failed to create payment session: ${response.statusCode}';
+    } catch (e) {
+      emit(state.copyWith(response: Error('Error creando la orden: $e')));
     }
-  }
-
-   Future<void> _onCreateOrderEvent(CreateOrderEvent event, Emitter<ClientAddressListState> emit) async {
-    emit(state.copyWith(response: Loading()));
-
-    final order = Order(
-      id: 0,
-      idClient: event.idUser,
-      idAddress: event.idAddress,
-      status: "CREADO",
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      user: null,
-      address: null,
-      orderHasProducts: null,
-      productsToCreate: event.products, 
-    );
-
-    final response = await ordersUseCases.createOrder.run(order);
-
-    emit(state.copyWith(response: response));
   }
 }
