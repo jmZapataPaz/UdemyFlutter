@@ -2,12 +2,22 @@ import 'dart:convert';
 import 'package:ecommerce_flutter/src/data/dataSource/local/sharedPref.dart';
 import 'package:ecommerce_flutter/src/domain/models/Product.dart';
 import 'package:ecommerce_flutter/src/domain/repository/shoppingBagRepository.dart';
-import 'package:ecommerce_flutter/src/data/api/ApiConfig.dart'; 
+import 'package:ecommerce_flutter/src/data/api/ApiConfig.dart';
+import 'package:ecommerce_flutter/src/domain/models/AuthResponse.dart';
 
 class ShoppingBagRepositoryIMP implements ShoppingBagRepository {
 
   SharedPref sharedPref;
   ShoppingBagRepositoryIMP(this.sharedPref);
+
+  Future<String> _getShoppingBagKey() async {
+    final userSession = await sharedPref.read('user');
+    if (userSession != null) {
+      AuthResponse authResponse = AuthResponse.fromJson(userSession);
+      return 'shopping_bag_${authResponse.user.id}';
+    }
+    return 'shopping_bag_guest';
+  }
 
   String _normalizeImageUrl(String? imageUrl) {
     if (imageUrl == null || imageUrl.isEmpty) return '';
@@ -41,7 +51,8 @@ class ShoppingBagRepositoryIMP implements ShoppingBagRepository {
   @override
   Future<List<Product>> getProducts() async {
     try {
-      final data = await sharedPref.read('shopping_bag');
+      final key = await _getShoppingBagKey();
+      final data = await sharedPref.read(key);
       
       if (data == null) {
         print('No hay productos en el carrito');
@@ -81,7 +92,7 @@ class ShoppingBagRepositoryIMP implements ShoppingBagRepository {
       }).where((product) => product != null).cast<Product>().toList();
       
       List<Map<String, dynamic>> normalizedProductsJson = products.map((p) => p.toJson()).toList();
-      await sharedPref.save('shopping_bag', normalizedProductsJson);
+      await sharedPref.save(key, normalizedProductsJson);
       
       print('Productos recuperados del carrito: ${products.length}');
       return products;
@@ -95,6 +106,7 @@ class ShoppingBagRepositoryIMP implements ShoppingBagRepository {
   @override
   Future<void> addProduct(Product product) async {
     try {
+      final key = await _getShoppingBagKey();
       product = _normalizeProductUrls(product);
       List<Product> products = await getProducts();
       int index = products.indexWhere((p) => p.id == product.id);
@@ -107,7 +119,7 @@ class ShoppingBagRepositoryIMP implements ShoppingBagRepository {
       }
       
       List<Map<String, dynamic>> productsJson = products.map((p) => p.toJson()).toList();
-      await sharedPref.save('shopping_bag', productsJson);
+      await sharedPref.save(key, productsJson);
       
     } catch (e) {
       print('Error al agregar producto al carrito: $e');
@@ -117,7 +129,8 @@ class ShoppingBagRepositoryIMP implements ShoppingBagRepository {
   @override
   Future<void> deleteShoppingBag() async {
     try {
-      await sharedPref.remove('shopping_bag');
+      final key = await _getShoppingBagKey();
+      await sharedPref.remove(key);
       print('Carrito de compras limpiado');
     } catch (e) {
       print('Error al limpiar carrito: $e');
@@ -127,11 +140,12 @@ class ShoppingBagRepositoryIMP implements ShoppingBagRepository {
   @override
   Future<void> deleteitem(Product product) async {
     try {
+      final key = await _getShoppingBagKey();
       List<Product> products = await getProducts();
       products.removeWhere((p) => p.id == product.id);
       
       List<Map<String, dynamic>> productsJson = products.map((p) => p.toJson()).toList();
-      await sharedPref.save('shopping_bag', productsJson);
+      await sharedPref.save(key, productsJson);
       
       print('Producto eliminado del carrito: ${product.id}');
     } catch (e) {
@@ -141,7 +155,8 @@ class ShoppingBagRepositoryIMP implements ShoppingBagRepository {
 
   @override
   Future<double> getTotal() async  {
-    final data = await sharedPref.read('shopping_bag');
+    final key = await _getShoppingBagKey();
+    final data = await sharedPref.read(key);
     if (data == null) {
       return 0;
     } 

@@ -44,3 +44,7 @@ class GetTotal extends ClientShoppingBagEvent {
   const GetTotal();
 
 }
+
+class ClearShoppingBag extends ClientShoppingBagEvent {
+  const ClearShoppingBag();
+}
