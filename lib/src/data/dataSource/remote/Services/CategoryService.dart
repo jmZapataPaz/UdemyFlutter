@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:ecommerce_flutter/src/data/api/ApiConfig.dart';
-import 'package:ecommerce_flutter/src/data/dataSource/local/sharedPref.dart';
+import 'package:ecommerce_flutter/src/data/api/HttpInterceptor.dart';
 import 'package:ecommerce_flutter/src/domain/models/Category.dart';
 import 'package:ecommerce_flutter/src/domain/utils/ListToString.dart';
 import 'package:ecommerce_flutter/src/domain/utils/Resource.dart';
@@ -12,6 +12,8 @@ import 'package:path/path.dart';
 class CategoryService {
 
   Future<String> token;
+  final HttpInterceptor _httpInterceptor = HttpInterceptor();
+  
   CategoryService(this.token);
 
   Future<Resource<Category>> create(Category category, File? file) async{
@@ -34,7 +36,7 @@ class CategoryService {
       request.fields['name'] = category.name;
       request.fields['description'] = category.description;
 
-      final response = await request.send();
+      final response = await _httpInterceptor.send(request);
       final data = json.decode(await response.stream.transform(utf8.decoder).first);
 
       if(response.statusCode == 200 || response.statusCode == 201){
@@ -55,16 +57,16 @@ class CategoryService {
     try{
       Uri url = Uri.http(ApiConfig.API_ECOMMERCE, '/categories/getCategories');
       
-      
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Authorization': await token
       };
       
       print('URL para obtener categorías: $url');
+      print('Headers: $headers');
       print('Token: $token');
       
-      final response = await http.get(url, headers: headers);
+      final response = await _httpInterceptor.get(url, headers: headers);
       
       print('Status Code: ${response.statusCode}');
       print('Response Body: ${response.body}');
@@ -109,7 +111,7 @@ class CategoryService {
       request.fields['name'] = category.name;
       request.fields['description'] = category.description;
 
-      final response = await request.send();
+      final response = await _httpInterceptor.send(request);
       final data = json.decode(await response.stream.transform(utf8.decoder).first);
 
       if(response.statusCode == 200 || response.statusCode == 201){
@@ -126,12 +128,9 @@ class CategoryService {
     }
   }
 
-
-
   Future<Resource<bool>> deleteCategory(int id) async{
     try{
       Uri url = Uri.http(ApiConfig.API_ECOMMERCE, '/categories/delete/$id');
-      
       
       Map<String, String> headers = {
         'Content-Type': 'application/json',
@@ -142,17 +141,15 @@ class CategoryService {
       print('URL: $url');
       print('Token: $token');
       
-      final response = await http.delete(url, headers: headers);
+      final response = await _httpInterceptor.delete(url, headers: headers);
       
       print('Delete Status Code: ${response.statusCode}');
       print('Delete Response Body: ${response.body}');
       
-      // Status 204 = No Content, eliminación exitosa
       if(response.statusCode == 200 || response.statusCode == 201 || response.statusCode == 204){
-        return Success(true); // Devolver true para indicar éxito
+        return Success(true);
       }
       else{
-        // Solo intentar parsear JSON si hay contenido
         if (response.body.isNotEmpty) {
           final data = json.decode(response.body);
           String errorMessage = data['message'] != null ? listToString(data['message']) : 'Error al eliminar categoría';

@@ -50,12 +50,32 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
         ],
       ),
       
-      bottomNavigationBar: Container(
-        child: ElevatedButton(
-          onPressed: (){
-            _bloc?.add(OnPaymentStripeSubmit());
-          }, 
-          child: Text('Pagar')),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: ElevatedButton(
+        onPressed: () {
+          _bloc?.add(OnPaymentStripeSubmit());
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.deepOrange, 
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30), 
+          ),
+          elevation: 5,
+        ),
+        child: const Text(
+          'Pagar',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+          ),
+        ),
       ),
 
       body: BlocListener<ClientAddressListBloc, ClientAddressListState>(

@@ -32,8 +32,8 @@ class ClientProductListItem extends StatelessWidget {
         child: Row(
           children: [
             product != null ? Container(
-              width: screenWidth * (isTablet ? 0.15 : 0.18),
-              height: screenHeight * (isTablet ? 0.10 : 0.12),
+              width: screenWidth * (isTablet ? 0.15 : 0.20),
+              height: screenHeight * (isTablet ? 0.10 : 0.10),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 boxShadow: [

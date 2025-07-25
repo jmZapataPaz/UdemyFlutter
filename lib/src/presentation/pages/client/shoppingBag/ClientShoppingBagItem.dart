@@ -134,7 +134,7 @@ class ClientShoppingBagItem extends StatelessWidget {
     bool isTablet = screenWidth > 600;
     
     return Text(
-      product != null ? product!.name! : 'Título del Producto',
+      product != null ? product!.name : 'Título del Producto',
       style: TextStyle(
         fontSize: screenWidth * (isTablet ? 0.035 : 0.045),
         fontWeight: FontWeight.bold,
@@ -183,8 +183,8 @@ class ClientShoppingBagItem extends StatelessWidget {
     bool isTablet = screenWidth > 600;
     
     return Container(
-      width: screenWidth * (isTablet ? 0.15 : 0.18),
-      height: screenHeight * (isTablet ? 0.10 : 0.12),
+      width: screenWidth * (isTablet ? 0.15 : 0.20),
+      height: screenHeight * (isTablet ? 0.10 : 0.10),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         boxShadow: [

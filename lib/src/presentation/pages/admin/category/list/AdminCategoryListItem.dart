@@ -34,7 +34,7 @@ class Admincategorylistitem extends StatelessWidget {
           children: [
             category != null ? Container(
               width: screenWidth * (isTablet ? 0.15 : 0.18),
-              height: screenHeight * (isTablet ? 0.10 : 0.12),
+              height: screenHeight * (isTablet ? 0.10 : 0.08), 
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 boxShadow: [

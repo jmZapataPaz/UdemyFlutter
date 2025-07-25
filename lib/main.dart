@@ -1,6 +1,8 @@
 import 'package:app_links/app_links.dart';
 import 'package:ecommerce_flutter/injection.dart';
 import 'package:ecommerce_flutter/src/blockProviders.dart';
+import 'package:ecommerce_flutter/src/data/api/HttpInterceptor.dart';
+import 'package:ecommerce_flutter/src/data/dataSource/local/sharedPref.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/category/create/AdminCategoryCreatePage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/category/update/AdminCategoryUpdatePage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/home/AdminHomePage.dart';
@@ -28,6 +30,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await configureDependencies();
+  
+  final sharedPref = locator<SharedPref>();
+  HttpInterceptor().initialize(sharedPref);
+  
   runApp(const MainApp());
 }
 
@@ -46,6 +52,7 @@ class _MainAppState extends State<MainApp> {
   void initState() {
     super.initState();
     _listenToLinks();
+    HttpInterceptor().navigatorKey = navigatorKey;
   }
 
   void _listenToLinks(){
@@ -77,7 +84,6 @@ class _MainAppState extends State<MainApp> {
         'admin/product/create': (BuildContext context) => AdminProductCreatePage(),
         'admin/product/update': (BuildContext context) => AdminProductUpdatePage(),
         'admin/order/detail': (BuildContext context) => AdminOrderDetailPage(),          
-        'client/order/detail': (BuildContext context) => ClientOrderDetailPage(),
         'profile/info': (BuildContext context) => ProfileInfoPage(),
         'profile/update': (BuildContext context) => ProfileUpdatePage(),
         'client/product/list': (BuildContext context) => ClientProductListPage(),
@@ -85,10 +91,10 @@ class _MainAppState extends State<MainApp> {
         'client/shoppingBag': (BuildContext context) => ClientShoppingBagPage(),
         'client/address/list': (BuildContext context) => ClientAddressListPage(),
         'client/address/create': (BuildContext context) => ClientAddressCreatePage(),
+        'client/order/detail': (BuildContext context) => ClientOrderDetailPage(),        
         'client/payment/success': (BuildContext context) => PaymentSuccessPage(),
-        
-      },
-    )
+      }
+      ),
     );
   }
 }

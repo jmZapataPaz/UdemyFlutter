@@ -15,6 +15,9 @@ class ClientAddressCreateContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Form(
       key: state.formKey,
       child: Stack(
@@ -27,15 +30,14 @@ class ClientAddressCreateContent extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _imageCategory(context),
-                    _cardCategoryForm(context),
-                    
+                    _imageAddress(context),
+                    _cardAddressForm(context),
                   ],
                 ),
               ),
             ),
             DefaultIconBack(
-              left: MediaQuery.of(context).size.width * 0.05, 
+              left: screenWidth * 0.05, 
               top: MediaQuery.of(context).padding.top + 10,
           ),
         ],
@@ -43,58 +45,84 @@ class ClientAddressCreateContent extends StatelessWidget {
     );
   }
 
-  Widget _cardCategoryForm( BuildContext context) {
+  Widget _cardAddressForm( BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    bool isTablet = screenWidth > 600;
+    
     return Container(
       width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.43,
+      height: screenHeight * (isTablet ? 0.45 : 0.43),
       decoration: BoxDecoration(
         color: Color.fromRGBO(255, 255, 255, 0.7),
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
+          topLeft: Radius.circular(35),
+          topRight: Radius.circular(35),
         ),
       ),
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-        child: Column(
-          children: [
-            _textNewCategory(),
-            _textFieldAddress(),
-            _textFieldNeighborhood(),
-            _fabSubmit()
-          ],
+        margin: EdgeInsets.symmetric(
+          horizontal: screenWidth * (isTablet ? 0.1 : 0.05), 
+          vertical: screenWidth * (isTablet ? 0.05 : 0.08),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _textNewCategory(context),
+              _textFieldAddress(context),
+              _textFieldNeighborhood(context),
+              _fabSubmit(context)
+            ],
+          ),
         ),
       )
     );
   }
 
-  Widget _fabSubmit(){
+  Widget _fabSubmit(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Container(
       alignment: Alignment.centerRight,
-      margin: EdgeInsets.only(top: 30, right: 10),
-      child: FloatingActionButton(
-        onPressed: () {
-          if(state.formKey!.currentState!.validate()) {
-            bloc?.add(FormSubmitted());
-          }
-        },
-        tooltip: 'Submit Category',
-        backgroundColor: Colors.black,
-        child: Icon(
-          Icons.check,
-          color: Colors.white,
+      margin: EdgeInsets.only(
+        top: screenWidth * (isTablet ? 0.05 : 0.08), 
+      ),
+      child: SizedBox(
+        width: screenWidth * (isTablet ? 0.12 : 0.15),
+        height: screenWidth * (isTablet ? 0.12 : 0.15),
+        child: FloatingActionButton(
+          onPressed: () {
+            if(state.formKey!.currentState!.validate()) {
+              bloc?.add(FormSubmitted());
+            }
+          },
+          tooltip: 'Submit Address',
+          backgroundColor: Colors.black,
+          child: Icon(
+            Icons.check,
+            color: Colors.white,
+            size: screenWidth * (isTablet ? 0.05 : 0.06),
+          ),
         ),
       ),
     );
   }
 
-  Widget _textNewCategory(){
+  Widget _textNewCategory(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Container(
-      alignment: Alignment.centerLeft,
-      margin: EdgeInsets.only(top: 25, left:10, bottom: 10),
+      alignment: Alignment.center,
+      margin: EdgeInsets.only(
+        top: screenWidth * (isTablet ? 0.05 : 0.06), 
+        bottom: screenWidth * (isTablet ? 0.025 : 0.03),
+      ),
       child: Text('Nueva dirección',
         style: TextStyle(
-          fontSize: 20,
+          fontSize: screenWidth * (isTablet ? 0.04 : 0.05),
           fontWeight: FontWeight.bold,
           color: Colors.black
         ),
@@ -102,43 +130,62 @@ class ClientAddressCreateContent extends StatelessWidget {
     );
   }
 
-  Widget _textFieldAddress(){
-    return DefaultTextField(
-      label: 'Direccion', 
-      icon: Icons.my_location, 
-      onChanded: (text){
-        bloc?.add(AddressChanged(address: BlocFormItem(value: text))); 
-      },
-      validator: (value){
-        return state.address.error;
-      },
-      color: Colors.black,
-    );
-  }
-
-  Widget _textFieldNeighborhood(){
-    return DefaultTextField(
-      label: 'Vecindario', 
-      icon: Icons.location_on, 
-      onChanded: (text){
-        bloc?.add(NeighborhoodChanged(neighborhood: BlocFormItem(value: text))); 
-      },
-      validator: (value){
-        return state.neighborhood.error;
-      },
-      color: Colors.black,
-    );
-  }
-
-
-  Widget _imageCategory(BuildContext context) {
+  Widget _textFieldAddress(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
     return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 50),
+      margin: EdgeInsets.symmetric(vertical: screenWidth * (isTablet ? 0.02 : 0.025)),
+      child: Transform.scale(
+        scale: isTablet ? 1.15 : 1.0,
+        child: DefaultTextField(
+          label: 'Dirección', 
+          icon: Icons.my_location, 
+          onChanded: (text){
+            bloc?.add(AddressChanged(address: BlocFormItem(value: text))); 
+          },
+          validator: (value){
+            return state.address.error;
+          },
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+
+  Widget _textFieldNeighborhood(BuildContext context){
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: screenWidth * (isTablet ? 0.02 : 0.025)),
+      child: Transform.scale(
+        scale: isTablet ? 1.15 : 1.0,
+        child: DefaultTextField(
+          label: 'Vecindario', 
+          icon: Icons.location_on, 
+          onChanded: (text){
+            bloc?.add(NeighborhoodChanged(neighborhood: BlocFormItem(value: text))); 
+          },
+          validator: (value){
+            return state.neighborhood.error;
+          },
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+
+  Widget _imageAddress(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    return Container(
+      margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + (screenWidth * (isTablet ? 0.08 : 0.12))),
       child: Image.asset(
         'assets/img/location.png',
         fit: BoxFit.cover,
-        width: MediaQuery.of(context).size.width * 0.35,
-        height: MediaQuery.of(context).size.width * 0.35,
+        width: screenWidth * (isTablet ? 0.40 : 0.35),
+        height: screenWidth * (isTablet ? 0.40 : 0.35),
       ),
     );
   }
