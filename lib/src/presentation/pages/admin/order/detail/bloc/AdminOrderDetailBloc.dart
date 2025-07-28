@@ -9,21 +9,9 @@ class AdminOrderDetailBloc extends Bloc<AdminOrderDetailEvent, AdminOrderDetailS
   OrdersUseCases ordersUseCases;
 
   AdminOrderDetailBloc(this.ordersUseCases): super(AdminOrderDetailState()) {
-    on<UpdateStatusOrder>(_onUpdateStatusOrder);
+  
   } 
 
-  Future<void> _onUpdateStatusOrder(UpdateStatusOrder event, Emitter<AdminOrderDetailState> emit) async {
-    emit(
-      state.copyWith(
-        response: Loading()
-      )
-    );
-    Resource response = await ordersUseCases.updateStatus.run(event.id);
-    emit(
-      state.copyWith(
-        response: response
-      )
-    );
-  }
+
 
 }

@@ -1,13 +1,13 @@
 import 'package:ecommerce_flutter/src/domain/models/Order.dart';
-import 'package:ecommerce_flutter/src/presentation/pages/admin/order/detail/bloc/AdminOrderDetailBloc.dart';
-import 'package:ecommerce_flutter/src/presentation/pages/admin/order/detail/bloc/AdminOrderDetailEvent.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/driver/order/detail/bloc/DriverOrderDetailBloc.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/driver/order/detail/bloc/DriverOrderDetailEvent.dart';
 import 'package:ecommerce_flutter/src/presentation/widgets/DefaultButton.dart';
 import 'package:flutter/material.dart';
 
-class AdminOrderDetailBottom extends StatelessWidget {
+class DriverOrderDetailBottom extends StatelessWidget {
   Order? order;
-  AdminOrderDetailBloc? bloc;
-  AdminOrderDetailBottom(this.bloc, this.order);
+  DriverOrderDetailBloc? bloc;
+  DriverOrderDetailBottom(this.bloc, this.order);
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +89,17 @@ class AdminOrderDetailBottom extends StatelessWidget {
                     ),
                   ),
                 ),
+                Container(
+                  width: screenWidth * (isTablet ? 0.25 : 0.4),
+                  height: screenHeight * (isTablet ? 0.05 : 0.045),
+                    child: (order?.status == 'PAGADO' || order?.status == 'CREADO')
+                  ? DefaultButton(
+                    text: 'Entregar', 
+                    onPressed: () {
+                      bloc?.add(UpdateStatusOrder(id: order!.id, status: "ENTREGADO"));                    }
+                  )
+                  : Container()
+                )
               ],
             ),
             SizedBox(height: screenHeight * 0.005),

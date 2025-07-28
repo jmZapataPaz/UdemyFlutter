@@ -28,6 +28,9 @@ import 'package:ecommerce_flutter/src/presentation/pages/client/order/list/bloc/
 import 'package:ecommerce_flutter/src/presentation/pages/client/product/detail/bloc/ClientProductDetailBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/product/list/bloc/ClientProductListBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/shoppingBag/Bloc/ClientShoppingBagBloc.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/driver/home/bloc/DriverHomeBloc.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/driver/order/detail/bloc/DriverOrderDetailBloc.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/driver/order/list/bloc/DriverOrderListBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/profile/info/bloc/ProfileInfoBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/profile/info/bloc/ProfileInfoEvent.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/profile/update/bloc/ProfileUpdateBloc.dart';
@@ -74,11 +77,18 @@ List<BlocProvider> blocProviders = [
     create: (context) => ClientAddressCreateBloc(locator<AddressUseCase>(),locator<AuthUseCases>())..add(ClientAddressCreateInitEvent())),  
   BlocProvider<ClientAddressListBloc>(
     create: (context) => ClientAddressListBloc(locator<AddressUseCase>(), locator<AuthUseCases>(), locator<OrdersUseCases>())),
-  BlocProvider<AdminOrderListBloc>(create: (context) => AdminOrderListBloc(locator<OrdersUseCases>())),
-  BlocProvider<AdminOrderDetailBloc>(create: (context) => AdminOrderDetailBloc(locator<OrdersUseCases>())),
-  BlocProvider<ClientOrderListBloc>(create: (context) => ClientOrderListBloc(locator<OrdersUseCases>(), locator<AuthUseCases>())),
-  
-
+  BlocProvider<AdminOrderListBloc>(
+    create: (context) => AdminOrderListBloc(locator<OrdersUseCases>())),
+  BlocProvider<AdminOrderDetailBloc>(
+    create: (context) => AdminOrderDetailBloc(locator<OrdersUseCases>())),
+  BlocProvider<ClientOrderListBloc>(
+    create: (context) => ClientOrderListBloc(locator<OrdersUseCases>(), locator<AuthUseCases>())),
+  BlocProvider<DriverHomeBloc>(
+    create: (context) => DriverHomeBloc(locator<AuthUseCases>())),
+  BlocProvider<DriverOrderDetailBloc>(
+    create: (context) => DriverOrderDetailBloc(locator<OrdersUseCases>())),
+  BlocProvider<DriverOrderListBloc>(
+    create: (context) => DriverOrderListBloc(locator<OrdersUseCases>(), locator<AuthUseCases>())),  
 
 
 ];

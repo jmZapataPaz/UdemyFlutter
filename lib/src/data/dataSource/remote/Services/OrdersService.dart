@@ -87,22 +87,27 @@ class OrdersService {
     }
   }
 
-   Future<Resource<Order>> updateStatus(int id) async {
+   Future<Resource<Order>> updateStatus(int id, String status) async {
      try {
-      print('Id order: $id');
+      print('Actualizando orden $id a $status');
       Uri url = Uri.http(ApiConfig.API_ECOMMERCE, '/orders/$id');      
       Map<String, String> headers = { 
         "Content-Type": "application/json",
         "Authorization": await token
       };
-      final response = await http.put(url, headers: headers);
+      
+      String body = json.encode({"status": status});
+      print('Body enviado: $body');
+      
+      final response = await http.put(url, headers: headers, body: body);
       final data = json.decode(response.body);
       print('Data: $data');
+      
       if (response.statusCode == 200 || response.statusCode == 201) {
         Order orderResponse = Order.fromJson(data);
         return Success(orderResponse);
       }
-      else { // ERROR
+      else {
         return Error(listToString(data['message']));
       }      
     } catch (e) {

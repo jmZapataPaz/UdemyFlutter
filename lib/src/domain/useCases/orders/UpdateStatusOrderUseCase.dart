@@ -6,6 +6,6 @@ class UpdateStatusOrderUseCase {
 
   UpdateStatusOrderUseCase(this.ordersRepository);
 
-  run(int id) => ordersRepository.updateStatus(id);
+  run(int id, String status) => ordersRepository.updateStatus(id, status);
 
 }

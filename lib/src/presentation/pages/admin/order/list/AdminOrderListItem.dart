@@ -25,7 +25,7 @@ class AdminOrderListItem extends StatelessWidget {
               ),
             ),
             Text(
-              'Fecha: ${order.createdAt}',
+              'Fecha: ${order.createdAt != null ? '${order.createdAt!.day.toString().padLeft(2, '0')}/${order.createdAt!.month.toString().padLeft(2, '0')}/${order.createdAt!.year}' : ''}',
               style: TextStyle(
                 fontSize: 16
               ),
@@ -42,16 +42,49 @@ class AdminOrderListItem extends StatelessWidget {
                 fontSize: 16
               )
             ),
-            Text(
-              'Estado: ${order.status}',
-              style: TextStyle(
-                fontSize: 16
-              )
+            Row(
+              children: [
+                Text(
+                  'Estado: ',
+                  style: TextStyle(
+                    fontSize: 16
+                  )
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: _getStatusColor(order.status),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    order.status ?? '',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    )
+                  ),
+                ),
+              ],
             ),
+            SizedBox(height: 8),
             Divider(color: Colors.grey[300],)
           ],
         ),
       ),
     );
+  }
+
+  Color _getStatusColor(String? status) {
+    switch (status?.toUpperCase()) {
+      case 'CREADO':
+        return Colors.blue[600]!;
+      case 'PAGADO':
+        return Colors.orange[600]!;
+      case 'ENTREGADO':
+        return Colors.green[600]!;
+      default:
+        return Colors.grey[600]!;
+    }
   }
 }

@@ -3,10 +3,16 @@ import 'package:ecommerce_flutter/src/domain/models/Order.dart';
 import 'package:ecommerce_flutter/src/domain/repository/OrdersRepository.dart';
 import 'package:ecommerce_flutter/src/domain/utils/Resource.dart';
 
-class OrderRepositoryImpl implements OrdersRepository {
-  final OrdersService ordersService;
+class OrderRepositoryIMP implements OrdersRepository {
 
-  OrderRepositoryImpl(this.ordersService);
+  OrdersService ordersService;
+
+  OrderRepositoryIMP(this.ordersService);
+
+  @override
+  Future<Resource<Order>> createOrder(Order order) {
+    return ordersService.createOrder(order);
+  }
 
   @override
   Future<Resource<List<Order>>> getOrders() {
@@ -19,12 +25,7 @@ class OrderRepositoryImpl implements OrdersRepository {
   }
 
   @override
-  Future<Resource<Order>> updateStatus(int id) {
-    return ordersService.updateStatus(id);
-  }
-  
-  @override
-  Future<Resource<Order>> createOrder(Order order) {
-    return ordersService.createOrder(order);
+  Future<Resource<Order>> updateStatus(int id, String status) {
+    return ordersService.updateStatus(id, status);
   }
 }

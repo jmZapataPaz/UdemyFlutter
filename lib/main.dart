@@ -20,6 +20,9 @@ import 'package:ecommerce_flutter/src/presentation/pages/client/payment/success/
 import 'package:ecommerce_flutter/src/presentation/pages/client/product/detail/ClientProductDetailPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/product/list/ClientProductListPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/shoppingBag/ClientShoppingBagPage.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/driver/home/DriverHomePage.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/driver/order/detail/DriverOrderDetailPage.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/driver/order/list/DriverOrderListPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/profile/info/ProfileInfoPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/profile/update/ProfileUpdatePage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/roles/RolesPage.dart';
@@ -93,6 +96,10 @@ class _MainAppState extends State<MainApp> {
         'client/address/create': (BuildContext context) => ClientAddressCreatePage(),
         'client/order/detail': (BuildContext context) => ClientOrderDetailPage(),        
         'client/payment/success': (BuildContext context) => PaymentSuccessPage(),
+        'driver/home': (BuildContext context) => DriverHomePage(),
+        'driver/order/list': (BuildContext context) => DriverOrderListPage(),
+        'driver/order/detail': (BuildContext context) => DriverOrderDetailPage(),
+
       }
       ),
     );

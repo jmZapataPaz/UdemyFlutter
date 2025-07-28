@@ -1,16 +1,16 @@
 import 'package:ecommerce_flutter/src/domain/models/Order.dart';
 import 'package:flutter/material.dart';
 
-class ClientOrderListItem extends StatelessWidget {
+class DriverOrderListItem extends StatelessWidget {
 
   Order order; 
-  ClientOrderListItem(this.order);
+  DriverOrderListItem(this.order);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, 'client/order/detail', arguments: order);
+        Navigator.pushNamed(context, 'driver/order/detail', arguments: order);
       },
       child: Container(
         margin: EdgeInsets.only(left: 30, right: 30),
@@ -32,6 +32,12 @@ class ClientOrderListItem extends StatelessWidget {
             ),
             Text(
               'Entregar en: ${order.address?.address}',
+              style: TextStyle(
+                fontSize: 16
+              )
+            ),
+            Text(
+              'Cliente: ${order.user?.name} ${order.user?.lastname}',
               style: TextStyle(
                 fontSize: 16
               )

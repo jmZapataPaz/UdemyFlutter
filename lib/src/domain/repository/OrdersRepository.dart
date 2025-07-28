@@ -5,6 +5,6 @@ abstract class OrdersRepository {
   Future<Resource<Order>> createOrder(Order order);
   Future<Resource<List<Order>>> getOrders();
   Future<Resource<List<Order>>> getOrdersByClient(int idClient);
-  Future<Resource<Order>> updateStatus(int id);
+  Future<Resource<Order>> updateStatus(int id, String status);
 
 }
