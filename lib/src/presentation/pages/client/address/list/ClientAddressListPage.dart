@@ -49,34 +49,6 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
         ],
       ),
       
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: ElevatedButton(
-        onPressed: () {
-          _bloc?.add(OnPaymentStripeSubmit());
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.deepOrange, 
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30), 
-          ),
-          elevation: 5,
-        ),
-        child: const Text(
-          'Pagar',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-          ),
-        ),
-      ),
-
       body: BlocListener<ClientAddressListBloc, ClientAddressListState>(
         listener: (context, state){
           final responseState = state.response;
@@ -94,33 +66,72 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
         child: BlocBuilder<ClientAddressListBloc, ClientAddressListState>(
           builder: (context, state){
             final responseState = state.response;
-            if(responseState is Success && responseState.data is List<Address>){
-              List<Address> address = responseState.data as List<Address>;
-              _bloc?.add(SetAddressSession(addressList: address));
-              return ListView.builder(
-                itemCount: address.length,
-                itemBuilder: (context, index){
-                  return ClientAddressListItem(_bloc, state, address[index], index);
-                },
-              );
+            bool hasAddresses = false;
+            List<Address> addressList = [];
+            if (responseState is Success && responseState.data is List<Address>) {
+              addressList = responseState.data as List<Address>;
+              hasAddresses = addressList.isNotEmpty;
+              _bloc?.add(SetAddressSession(addressList: addressList));
             }
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.location_off, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text(
-                    'No tienes direcciones guardadas',
-                    style: TextStyle(fontSize: 18, color: Colors.grey, fontWeight: FontWeight.bold),
+            return Column(
+              children: [
+                Expanded(
+                  child: hasAddresses
+                    ? ListView.builder(
+                        itemCount: addressList.length,
+                        itemBuilder: (context, index) {
+                          return ClientAddressListItem(_bloc, state, addressList[index], index);
+                        },
+                      )
+                    : Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.location_off, size: 64, color: Colors.grey),
+                            SizedBox(height: 16),
+                            Text(
+                              'No tienes direcciones guardadas',
+                              style: TextStyle(fontSize: 18, color: Colors.grey, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              'Agrega una dirección para continuar',
+                              style: TextStyle(fontSize: 14, color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: hasAddresses
+                        ? () {
+                            _bloc?.add(OnPaymentStripeSubmit());
+                          }
+                        : null, 
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.deepOrange,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        elevation: 5,
+                      ),
+                      child: const Text(
+                        'Pagar',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Agrega una dirección para continuar',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                ],
-              ),
+                ),
+              ],
             );
           },
         ),

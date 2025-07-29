@@ -100,43 +100,47 @@ class ClientAddressListBloc extends Bloc<ClientAddressListEvent, ClientAddressLi
     final response = await http.post(
       Uri.parse('https://${ApiConfig.NGROK_URL}/payment_stripe/create'),
     );
-    
-    if(response.statusCode == 200) {
-      final url = jsonDecode(response.body)['checkout_url'];
-      if (await canLaunchUrl(Uri.parse(url))){
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      print('Stripe create response: $body'); 
+      final url = body['checkout_url'];
+      final sessionId = body['session_id']; 
+
+      if (await canLaunchUrl(Uri.parse(url))) {
         await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-        await _waitAndVerifyPayment(emit);
-      }
-      else {
+        await _waitAndVerifyPayment(emit, sessionId); 
+      } else {
         throw 'Could not launch $url';
       }
-    }
-    else{
+    } else {
       throw 'Failed to create payment session: ${response.statusCode}';
     }
   }
 
-  Future<void> _waitAndVerifyPayment(Emitter<ClientAddressListState> emit) async {
+  Future<void> _waitAndVerifyPayment(Emitter<ClientAddressListState> emit, String sessionId) async {
     await Future.delayed(Duration(seconds: 10));
     int attempts = 0;
-    const maxAttempts = 12; 
-    
+    const maxAttempts = 12;
+
     while (attempts < maxAttempts) {
       try {
         final verifyResponse = await http.get(
-          Uri.parse('https://${ApiConfig.NGROK_URL}/payment_stripe/success'),
+          Uri.parse('https://${ApiConfig.NGROK_URL}/payment_stripe/success?session_id=$sessionId'),
         );
-        
         if (verifyResponse.statusCode == 200) {
-          await _createOrderAfterPayment(emit);
-          return; 
+          final data = jsonDecode(verifyResponse.body);
+          print('Verificando pago: $data');
+          if (data['payment_status'] == 'success') {
+            print('Pago exitoso, creando orden...');
+            await _createOrderAfterPayment(emit);
+            return;
+          }
         }
-        
         attempts++;
         if (attempts < maxAttempts) {
           await Future.delayed(Duration(seconds: 10));
         }
-        
       } catch (e) {
         attempts++;
         await Future.delayed(Duration(seconds: 10));
@@ -172,9 +176,11 @@ class ClientAddressListBloc extends Bloc<ClientAddressListEvent, ClientAddressLi
       );
 
       final response = await ordersUseCases.createOrder.run(order);
+      print('Orden creada: $response');
       emit(state.copyWith(response: response));
       
     } catch (e) {
+      print('Error creando la orden: $e');
       emit(state.copyWith(response: Error('Error creando la orden: $e')));
     }
   }
