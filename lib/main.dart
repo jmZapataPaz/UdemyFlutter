@@ -10,6 +10,7 @@ import 'package:ecommerce_flutter/src/presentation/pages/admin/order/detail/Admi
 import 'package:ecommerce_flutter/src/presentation/pages/admin/product/create/AdminProductCreatePage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/product/list/AdminProductListPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/product/update/AdminProductUpdatePage.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/admin/superAdmin/SuperAdminPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/auth/login/LoginPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/auth/register/RegisterPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/address/create/ClientAddressCreatePage.dart';
@@ -86,7 +87,8 @@ class _MainAppState extends State<MainApp> {
         'admin/product/list': (BuildContext context) => AdminProductListPage(),
         'admin/product/create': (BuildContext context) => AdminProductCreatePage(),
         'admin/product/update': (BuildContext context) => AdminProductUpdatePage(),
-        'admin/order/detail': (BuildContext context) => AdminOrderDetailPage(),          
+        'admin/order/detail': (BuildContext context) => AdminOrderDetailPage(), 
+        'admin/superAdmin': (BuildContext context) => SuperAdminPage(),     
         'profile/info': (BuildContext context) => ProfileInfoPage(),
         'profile/update': (BuildContext context) => ProfileUpdatePage(),
         'client/product/list': (BuildContext context) => ClientProductListPage(),

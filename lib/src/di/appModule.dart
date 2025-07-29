@@ -4,17 +4,20 @@ import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/AuthServic
 import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/CategoryService.dart';
 import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/OrdersService.dart';
 import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/ProductService.dart';
+import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/SuperAdminService.dart';
 import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/UserService.dart';
 import 'package:ecommerce_flutter/src/data/repository/addressRepositoryIMP.dart';
 import 'package:ecommerce_flutter/src/data/repository/orderRepositoryIMP.dart';
 import 'package:ecommerce_flutter/src/data/repository/productRepositoryIMP.dart';
 import 'package:ecommerce_flutter/src/data/repository/shoppingBagRepositoryIMP.dart';
+import 'package:ecommerce_flutter/src/data/repository/superAdminRepositoryIMP.dart';
 import 'package:ecommerce_flutter/src/domain/models/AuthResponse.dart';
 import 'package:ecommerce_flutter/src/domain/repository/OrdersRepository.dart';
 import 'package:ecommerce_flutter/src/domain/repository/addressRepository.dart';
 import 'package:ecommerce_flutter/src/domain/repository/categoryRepository.dart';
 import 'package:ecommerce_flutter/src/domain/repository/productRepository.dart';
 import 'package:ecommerce_flutter/src/domain/repository/shoppingBagRepository.dart';
+import 'package:ecommerce_flutter/src/domain/repository/superAdminRepository.dart';
 import 'package:ecommerce_flutter/src/domain/repository/userRepository.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/address/AddressUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/address/CreateAddressUseCase.dart';
@@ -44,6 +47,7 @@ import 'package:ecommerce_flutter/src/domain/useCases/shoppingBag/DeleteShopping
 import 'package:ecommerce_flutter/src/domain/useCases/shoppingBag/GetProductShoppingBagUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/shoppingBag/GetTotalShoppingBagUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/shoppingBag/ShoppingBagUseCase.dart';
+import 'package:ecommerce_flutter/src/domain/useCases/superAdmin/SuperAdminUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/user/UpdateUserUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/user/UserUseCase.dart';
 import 'package:ecommerce_flutter/src/data/repository/authRepositoryIMP.dart';
@@ -194,9 +198,17 @@ abstract class AppModule{
     createOrder: CreateOrdersUseCase(ordersRepository),
   );
 
-  //Driver
+  //SuperAdmin
 
 
+  @injectable
+  SuperAdminService get superAdminService => SuperAdminService(token);
+
+  @injectable
+  SuperAdminRepository get superAdminRepository => SuperAdminRepositoryIMP(superAdminService);
+
+  @injectable
+  SuperAdminUseCase get superAdminUseCase => SuperAdminUseCase(superAdminRepository);
 
 
 

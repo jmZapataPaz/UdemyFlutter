@@ -5,6 +5,7 @@ import 'package:ecommerce_flutter/src/domain/useCases/categories/CategoryUseCase
 import 'package:ecommerce_flutter/src/domain/useCases/orders/OrdersUseCases.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/products/ProductUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/shoppingBag/ShoppingBagUseCase.dart';
+import 'package:ecommerce_flutter/src/domain/useCases/superAdmin/SuperAdminUseCase.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/user/UserUseCase.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/category/create/bloc/AdminCategoryCreateBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/category/list/bloc/AdminCategoryListBloc.dart';
@@ -15,6 +16,7 @@ import 'package:ecommerce_flutter/src/presentation/pages/admin/order/list/bloc/A
 import 'package:ecommerce_flutter/src/presentation/pages/admin/product/create/bloc/AdminProductCreateBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/product/list/bloc/AdminProductListBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/product/update/bloc/AdminProductUpdateBloc.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/admin/superAdmin/bloc/SuperAdminBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/auth/login/bloc/LoginBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/auth/login/bloc/LoginEvent.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/auth/register/bloc/RegisterBloc.dart';
@@ -89,6 +91,8 @@ List<BlocProvider> blocProviders = [
     create: (context) => DriverOrderDetailBloc(locator<OrdersUseCases>())),
   BlocProvider<DriverOrderListBloc>(
     create: (context) => DriverOrderListBloc(locator<OrdersUseCases>(), locator<AuthUseCases>())),  
-
+  BlocProvider<SuperAdminBloc>(
+    create: (context) => SuperAdminBloc(locator<SuperAdminUseCase>()),
+  ),
 
 ];

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class DefaultTextField extends StatelessWidget {
-  String label;
-  String? initialValue;
-  String? errorText;
-  IconData icon;
-  Color? color;
-  Function (String text) onChanded;
-  String? Function(String?)? validator;
-  bool obscureText = false;
-  TextInputType? textInputType;
-  
-  DefaultTextField({
+class DefaultTextField extends StatefulWidget {
+  final String label;
+  final String? initialValue;
+  final String? errorText;
+  final IconData icon;
+  final Color? color;
+  final Function(String text) onChanded;
+  final String? Function(String?)? validator;
+  final bool obscureText;
+  final TextInputType? textInputType;
+
+  const DefaultTextField({
     Key? key,
     required this.label,
     required this.icon,
@@ -21,42 +21,65 @@ class DefaultTextField extends StatelessWidget {
     this.validator,
     this.initialValue,
     this.color = Colors.white,
-    this.textInputType = TextInputType.text
-  }): super(key: key);
+    this.textInputType = TextInputType.text,
+  }) : super(key: key);
 
+  @override
+  State<DefaultTextField> createState() => _DefaultTextFieldState();
+}
+
+class _DefaultTextFieldState extends State<DefaultTextField> {
+  late bool _obscure;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscure = widget.obscureText;
+  }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      obscureText: obscureText, //para que sea un campo de contraseña
-      initialValue: initialValue,
-      onChanged: (text){
-        onChanded(text);
-      },
-      keyboardType: textInputType,
-      validator: validator,
+      obscureText: _obscure,
+      initialValue: widget.initialValue,
+      onChanged: widget.onChanded,
+      keyboardType: widget.textInputType,
+      validator: widget.validator,
       decoration: InputDecoration(
-        label: Text(label,
-        style: TextStyle(
-          color: color,
-          fontSize: 16,
+        label: Text(
+          widget.label,
+          style: TextStyle(
+            color: widget.color,
+            fontSize: 16,
           ),
         ),
-        errorText: errorText,
+        errorText: widget.errorText,
         prefixIcon: Icon(
-          icon,
-          color: color,
+          widget.icon,
+          color: widget.color,
         ),
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: color!,)
+          borderSide: BorderSide(color: widget.color!),
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: color!,
-          ) 
+          borderSide: BorderSide(color: widget.color!),
         ),
+        suffixIcon: widget.obscureText
+            ? IconButton(
+                icon: Icon(
+                  _obscure ? Icons.visibility_off : Icons.visibility,
+                  color: widget.color,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _obscure = !_obscure;
+                  });
+                },
+              )
+            : null,
       ),
       style: TextStyle(
-        color: color,
+        color: widget.color,
       ),
     );
   }

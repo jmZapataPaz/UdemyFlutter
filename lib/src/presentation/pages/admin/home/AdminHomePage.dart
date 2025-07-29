@@ -4,6 +4,7 @@ import 'package:ecommerce_flutter/src/presentation/pages/admin/home/bloc/AdminHo
 import 'package:ecommerce_flutter/src/presentation/pages/admin/home/bloc/AdminHomeEvent.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/home/bloc/AdminHomeState.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/order/list/AdminOrderListPage.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/admin/superAdmin/SuperAdminPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/profile/info/ProfileInfoPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/roles/RolesPage.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   AdminHomeBloc? _bloc;
   List<Widget> pageList = <Widget>[
+    SuperAdminPage(),
     AdminCategoryListPage(),
     AdminOrderListPage(),
     RolesPage(),
@@ -85,33 +87,30 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   ),
                   
                   SizedBox(height: MediaQuery.of(context).size.height * 0.015), 
-                  
                   _buildDrawerItem(
                     context: context,
                     icon: Icons.category,
-                    title: 'Categorías',
+                    title: 'Asignar Roles',
                     isSelected: state.pageIndex == 0,
                     onTap: () {
                       _bloc?.add(AdminChangeDrawerPage(pageIndex: 0));
                       Navigator.pop(context);
                     },
                   ),
-                  
                   _buildDrawerItem(
                     context: context,
-                    icon: Icons.shopping_bag,
-                    title: 'Órdenes',
+                    icon: Icons.category,
+                    title: 'Categorías',
                     isSelected: state.pageIndex == 1,
                     onTap: () {
                       _bloc?.add(AdminChangeDrawerPage(pageIndex: 1));
                       Navigator.pop(context);
                     },
                   ),
-                  
                   _buildDrawerItem(
                     context: context,
-                    icon: Icons.admin_panel_settings,
-                    title: 'Roles',
+                    icon: Icons.shopping_bag,
+                    title: 'Órdenes',
                     isSelected: state.pageIndex == 2,
                     onTap: () {
                       _bloc?.add(AdminChangeDrawerPage(pageIndex: 2));
@@ -121,11 +120,22 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   
                   _buildDrawerItem(
                     context: context,
-                    icon: Icons.person,
-                    title: 'Perfil',
+                    icon: Icons.admin_panel_settings,
+                    title: 'Roles',
                     isSelected: state.pageIndex == 3,
                     onTap: () {
                       _bloc?.add(AdminChangeDrawerPage(pageIndex: 3));
+                      Navigator.pop(context);
+                    },
+                  ),
+                  
+                  _buildDrawerItem(
+                    context: context,
+                    icon: Icons.person,
+                    title: 'Perfil',
+                    isSelected: state.pageIndex == 4,
+                    onTap: () {
+                      _bloc?.add(AdminChangeDrawerPage(pageIndex: 4));
                       Navigator.pop(context);
                     },
                   ),

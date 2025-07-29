@@ -21,6 +21,8 @@ import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/OrdersServ
     as _i1037;
 import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/ProductService.dart'
     as _i251;
+import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/SuperAdminService.dart'
+    as _i690;
 import 'package:ecommerce_flutter/src/data/dataSource/remote/Services/UserService.dart'
     as _i380;
 import 'package:ecommerce_flutter/src/di/appModule.dart' as _i896;
@@ -36,6 +38,8 @@ import 'package:ecommerce_flutter/src/domain/repository/productRepository.dart'
     as _i88;
 import 'package:ecommerce_flutter/src/domain/repository/shoppingBagRepository.dart'
     as _i78;
+import 'package:ecommerce_flutter/src/domain/repository/superAdminRepository.dart'
+    as _i299;
 import 'package:ecommerce_flutter/src/domain/repository/userRepository.dart'
     as _i242;
 import 'package:ecommerce_flutter/src/domain/useCases/address/AddressUseCase.dart'
@@ -52,6 +56,8 @@ import 'package:ecommerce_flutter/src/domain/useCases/products/ProductUseCase.da
     as _i191;
 import 'package:ecommerce_flutter/src/domain/useCases/shoppingBag/ShoppingBagUseCase.dart'
     as _i11;
+import 'package:ecommerce_flutter/src/domain/useCases/superAdmin/SuperAdminUseCase.dart'
+    as _i1038;
 import 'package:ecommerce_flutter/src/domain/useCases/user/UserUseCase.dart'
     as _i823;
 import 'package:get_it/get_it.dart' as _i174;
@@ -90,6 +96,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1037.OrdersService>(() => appModule.ordersService);
     gh.factory<_i621.OrdersRepository>(() => appModule.ordersRepository);
     gh.factory<_i572.OrdersUseCases>(() => appModule.ordersUseCases);
+    gh.factory<_i690.SuperAdminService>(() => appModule.superAdminService);
+    gh.factory<_i299.SuperAdminRepository>(
+      () => appModule.superAdminRepository,
+    );
+    gh.factory<_i1038.SuperAdminUseCase>(() => appModule.superAdminUseCase);
     return this;
   }
 }
