@@ -40,20 +40,27 @@ class ProfileInfoContent extends StatelessWidget {
   Widget _imageProfile(BuildContext context){
     final screenWidth = MediaQuery.of(context).size.width;
     bool isTablet = screenWidth > 600;
-    
+
+    final imageUrl = user?.image;
+    final hasImage = imageUrl != null && imageUrl.isNotEmpty;
+
     return Container(
       margin: EdgeInsets.only(top: screenWidth * (isTablet ? 0.15 : 0.25)),
       width: screenWidth * (isTablet ? 0.40 : 0.4),
       child: AspectRatio(
         aspectRatio: 1/1,
         child: ClipOval(
-          child: user !=null ? FadeInImage.assetNetwork(
-            placeholder: 'assets/img/user_image.png', 
-            image: user!.image!,
-            fit: BoxFit.cover,
-            fadeInDuration: Duration(seconds: 1),
-          )
-          :Container(),
+          child: hasImage
+            ? FadeInImage.assetNetwork(
+                placeholder: 'assets/img/user_image.png',
+                image: imageUrl!,
+                fit: BoxFit.cover,
+                fadeInDuration: Duration(seconds: 1),
+                imageErrorBuilder: (context, error, stackTrace) {
+                  return Image.asset('assets/img/no-image.png', fit: BoxFit.cover);
+                },
+              )
+            : Image.asset('assets/img/no-image.png', fit: BoxFit.cover),
         ),
       ),
     );

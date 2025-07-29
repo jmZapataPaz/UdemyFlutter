@@ -31,7 +31,7 @@ class _ClientHomePageState extends State<ClientHomePage> {
     _bloc = BlocProvider.of<ClientHomeBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Menú'),
+        title: Text('Menú de cliente'),
         actions: [
           IconButton(onPressed: 
             () {

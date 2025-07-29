@@ -33,7 +33,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
     _bloc = BlocProvider.of<AdminHomeBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Menú'),
+        title: Text('Menú de administración'),
       ),
       drawer: BlocBuilder<AdminHomeBloc, AdminHomeState>(
         builder: (context, state) {

@@ -86,25 +86,9 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
               _bloc?.add(GetUserAddress()); 
             }
             else if(responseState.data is Order) {
-              Fluttertoast.showToast(
-                msg: "¡Orden creada exitosamente!",
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-              );
               final shoppingBagUseCases = locator<ShoppingBagUseCases>();
               shoppingBagUseCases.deleteShoppingBagUseCase.run();
             }
-          }
-          if(responseState is Error){
-            Fluttertoast.showToast(
-              msg: responseState.message,
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 16.0
-            );
           }
         },
         
@@ -121,7 +105,24 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
                 },
               );
             }
-            return Container();
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.location_off, size: 64, color: Colors.grey),
+                  SizedBox(height: 16),
+                  Text(
+                    'No tienes direcciones guardadas',
+                    style: TextStyle(fontSize: 18, color: Colors.grey, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Agrega una dirección para continuar',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                ],
+              ),
+            );
           },
         ),
       ),

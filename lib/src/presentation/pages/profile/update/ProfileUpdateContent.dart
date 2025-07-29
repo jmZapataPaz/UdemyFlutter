@@ -60,7 +60,7 @@ class ProfileUpdateContent extends StatelessWidget {
   Widget _imageProfile(BuildContext context){ 
     final screenWidth = MediaQuery.of(context).size.width;
     bool isTablet = screenWidth > 600;
-    
+
     return GestureDetector(
       onTap: () {
         SelectOptionImageDialog(
@@ -76,15 +76,19 @@ class ProfileUpdateContent extends StatelessWidget {
           aspectRatio: 1/1,
           child: ClipOval(
             child: state.image != null 
-            ? Image.file(state.image!,
-              fit: BoxFit.cover,
-            ) : 
-            FadeInImage.assetNetwork(
-              placeholder: 'assets/img/user_image.png', 
-              image: user!.image!,
-              fit: BoxFit.cover,
-              fadeInDuration: Duration(seconds: 1),
-            ),
+              ? Image.file(state.image!, fit: BoxFit.cover)
+              : (user?.image != null && user!.image!.isNotEmpty
+                  ? FadeInImage.assetNetwork(
+                      placeholder: 'assets/img/user_image.png', 
+                      image: user!.image!,
+                      fit: BoxFit.cover,
+                      fadeInDuration: Duration(seconds: 1),
+                    )
+                  : Image.asset(
+                      'assets/img/user_image.png',
+                      fit: BoxFit.cover,
+                    )
+                ),
           ),
         ),
       ),

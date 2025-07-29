@@ -29,7 +29,7 @@ class _DriverHomePageState extends State<DriverHomePage> {
     _bloc = BlocProvider.of<DriverHomeBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Menú'),
+        title: Text('Menú de conductor'),
       ),
       drawer: BlocBuilder<DriverHomeBloc, DriverHomeState>(
         builder: (context, state){
