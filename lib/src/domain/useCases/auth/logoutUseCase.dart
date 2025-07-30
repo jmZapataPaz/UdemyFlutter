@@ -1,8 +1,10 @@
 import 'package:ecommerce_flutter/src/domain/repository/authRepository.dart';
 
-class LogoutUseCase{
-
-  AuthRepository repository;
+class LogoutUseCase {
+  final AuthRepository repository;
   LogoutUseCase(this.repository);
-  run()=> repository.logout();
+
+  Future<void> run() async {
+    await repository.logout();
+  }
 }

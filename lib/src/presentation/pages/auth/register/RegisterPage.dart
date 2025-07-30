@@ -45,6 +45,9 @@ class _RegisterPageState extends State<RegisterPage> {
             }
             else if (responseState is Success){
               _bloc?.add(RegisterFormReset());
+              WidgetsBinding.instance.addPostFrameCallback((timeStamp){
+                Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
+              });
               Fluttertoast.showToast(
                 msg: 'Registro exitoso',
                 toastLength: Toast.LENGTH_LONG,

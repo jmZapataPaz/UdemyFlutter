@@ -52,13 +52,39 @@ class _LoginPageState extends State<LoginPage> {
             }
             else if (responseState is Success){
               final authResponse = responseState.data as AuthResponse;
-              //_bloc?.add(LoginFormReset());
               _bloc?.add(LoginSaveUserSession(authResponse: authResponse));
-              
-                WidgetsBinding.instance.addPostFrameCallback((timeStamp){
-                  Navigator.pushNamedAndRemoveUntil(context, 'roles',(route) => false);
-                });
-              }  
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                final roles = authResponse.user.roles;
+                if (roles != null && roles.isNotEmpty) {
+                  final firstRole = roles.first.name.toLowerCase();
+                  String route;
+                  switch (firstRole) {
+                    case 'admin':
+                      route = 'admin/home';
+                      break;
+                    case 'cliente':
+                      route = 'client/home';
+                      break;
+                    case 'conductor':
+                      route = 'driver/home';
+                      break;
+                    default:
+                      route = 'roles';
+                  }
+                  Navigator.pushNamedAndRemoveUntil(context, route, (route) => false);
+                } else {
+                  Fluttertoast.showToast(
+                    msg: 'No tienes roles asignados',
+                    toastLength: Toast.LENGTH_LONG,
+                    gravity: ToastGravity.BOTTOM,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0
+                  );
+                }
+              });
+            }  
             },
             child: BlocBuilder<LoginBloc, LoginState>(
               builder: (context, state){

@@ -1,4 +1,3 @@
-import 'package:ecommerce_flutter/main.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/category/list/ClientCategoryListPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/home/bloc/ClientHomeBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/home/bloc/ClientHomeEvent.dart';
@@ -185,13 +184,33 @@ class _ClientHomePageState extends State<ClientHomePage> {
                             : MediaQuery.of(context).size.width * 0.04,  
                         ),
                       ),
-                      onTap: () {
-                        _bloc?.add(Logout());
-                        Navigator.pushAndRemoveUntil(
-                          context, 
-                          MaterialPageRoute(builder:(context) => MainApp()), 
-                          (route) => false
+                      onTap: () async {
+                        final screenWidth = MediaQuery.of(context).size.width;
+                        final isTablet = screenWidth > 600;
+                        final shouldLogout = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            insetPadding: isTablet
+                              ? EdgeInsets.symmetric(horizontal: screenWidth * 0.25, vertical: 24)
+                              : EdgeInsets.symmetric(horizontal: 40, vertical: 24),
+                            title: Text('Cerrar sesión'),
+                            content: Text('¿Estás seguro que deseas cerrar sesión?'),
+                            actions: [
+                              TextButton(
+                                child: Text('No'),
+                                onPressed: () => Navigator.of(context).pop(false),
+                              ),
+                              TextButton(
+                                child: Text('Sí'),
+                                onPressed: () => Navigator.of(context).pop(true),
+                              ),
+                            ],
+                          ),
                         );
+                        if (shouldLogout == true) {
+                          _bloc?.add(Logout());
+                          Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
+                        }
                       },
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),

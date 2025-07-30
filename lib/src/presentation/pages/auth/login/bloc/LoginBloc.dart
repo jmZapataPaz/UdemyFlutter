@@ -6,11 +6,9 @@ import 'package:ecommerce_flutter/src/presentation/pages/auth/login/bloc/LoginEv
 import 'package:ecommerce_flutter/src/presentation/pages/auth/login/bloc/LoginState.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rxdart/rxdart.dart';
 
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  //aqui empaquetar todos los casos de uso
   AuthUseCases authUseCases;
 
 

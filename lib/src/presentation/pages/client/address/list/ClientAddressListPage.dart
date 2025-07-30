@@ -1,4 +1,5 @@
 import 'package:ecommerce_flutter/injection.dart';
+import 'package:ecommerce_flutter/src/data/dataSource/local/sharedPref.dart';
 import 'package:ecommerce_flutter/src/domain/models/Address.dart';
 import 'package:ecommerce_flutter/src/domain/models/Order.dart';
 import 'package:ecommerce_flutter/src/domain/useCases/shoppingBag/ShoppingBagUseCase.dart';
@@ -18,14 +19,28 @@ class ClientAddressListPage extends StatefulWidget {
 }
 
 class _ClientAddressListPageState extends State<ClientAddressListPage> {
-
   ClientAddressListBloc? _bloc;
+  String? _token;
+
   @override
   void initState() {
     super.initState();
+    _recoverToken();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _bloc?.add(GetUserAddress());
     });
+  }
+
+  Future<void> _recoverToken() async {
+    final sharedPref = SharedPref();
+    final userSession = await sharedPref.read('user');
+    if (userSession != null && userSession['token'] != null) {
+      setState(() {
+        _token = userSession['token'];
+      });
+    } else {
+      print('No hay token guardado');
+    }
   }
 
   @override

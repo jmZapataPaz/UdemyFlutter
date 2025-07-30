@@ -3,6 +3,7 @@ import 'package:ecommerce_flutter/injection.dart';
 import 'package:ecommerce_flutter/src/blockProviders.dart';
 import 'package:ecommerce_flutter/src/data/api/HttpInterceptor.dart';
 import 'package:ecommerce_flutter/src/data/dataSource/local/sharedPref.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/SplashScreen.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/category/create/AdminCategoryCreatePage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/category/update/AdminCategoryUpdatePage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/home/AdminHomePage.dart';
@@ -15,6 +16,7 @@ import 'package:ecommerce_flutter/src/presentation/pages/auth/login/LoginPage.da
 import 'package:ecommerce_flutter/src/presentation/pages/auth/register/RegisterPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/address/create/ClientAddressCreatePage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/address/list/ClientAddressListPage.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/client/category/list/ClientCategoryListPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/home/ClientHomePage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/order/detail/ClientOrderDetailPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/payment/success/PaymentSuccessPage.dart';
@@ -51,12 +53,14 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final _appLinks = AppLinks();
+  bool _loading = true;
 
   @override
   void initState() {
     super.initState();
     _listenToLinks();
     HttpInterceptor().navigatorKey = navigatorKey;
+    _checkSession();
   }
 
   void _listenToLinks(){
@@ -67,6 +71,34 @@ class _MainAppState extends State<MainApp> {
     });
   }
 
+  Future<void> _checkSession() async {
+    final sharedPref = locator<SharedPref>();
+    final userSession = await sharedPref.read('user');
+    if (userSession != null && userSession['token'] != null) {
+      final firstRole = userSession['user']['roles'][0]['name'].toLowerCase();
+      String route;
+      switch (firstRole) {
+        case 'admin':
+          route = 'admin/home';
+          break;
+        case 'cliente':
+          route = 'client/home';
+          break;
+        case 'conductor':
+          route = 'driver/home';
+          break;
+        default:
+          route = 'roles';
+      }
+      navigatorKey.currentState?.pushReplacementNamed(route);
+    } else {
+      navigatorKey.currentState?.pushReplacementNamed('login');
+    }
+    setState(() {
+      _loading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -74,35 +106,37 @@ class _MainAppState extends State<MainApp> {
       child: MaterialApp(
         builder: FToastBuilder(),
         navigatorKey: navigatorKey,
-      debugShowCheckedModeBanner: false, 
-      initialRoute: 'login',
-      routes: {
-        'login': (BuildContext context) => LoginPage(),
-        'register': (BuildContext context) => RegisterPage(),
-        'roles': (BuildContext context) => RolesPage(),
-        'client/home':(BuildContext context) => ClientHomePage(),
-        'admin/home':(BuildContext context) => AdminHomePage(), 
-        'admin/category/create': (BuildContext context) => AdminCategoryCreatePage(),
-        'admin/category/update': (BuildContext context) => AdminCategoryUpdatePage(),
-        'admin/product/list': (BuildContext context) => AdminProductListPage(),
-        'admin/product/create': (BuildContext context) => AdminProductCreatePage(),
-        'admin/product/update': (BuildContext context) => AdminProductUpdatePage(),
-        'admin/order/detail': (BuildContext context) => AdminOrderDetailPage(), 
-        'admin/superAdmin': (BuildContext context) => SuperAdminPage(),     
-        'profile/info': (BuildContext context) => ProfileInfoPage(),
-        'profile/update': (BuildContext context) => ProfileUpdatePage(),
-        'client/product/list': (BuildContext context) => ClientProductListPage(),
-        'client/product/detail': (BuildContext context) => ClientProductDetailPage(),
-        'client/shoppingBag': (BuildContext context) => ClientShoppingBagPage(),
-        'client/address/list': (BuildContext context) => ClientAddressListPage(),
-        'client/address/create': (BuildContext context) => ClientAddressCreatePage(),
-        'client/order/detail': (BuildContext context) => ClientOrderDetailPage(),        
-        'client/payment/success': (BuildContext context) => PaymentSuccessPage(),
-        'driver/home': (BuildContext context) => DriverHomePage(),
-        'driver/order/list': (BuildContext context) => DriverOrderListPage(),
-        'driver/order/detail': (BuildContext context) => DriverOrderDetailPage(),
+        debugShowCheckedModeBanner: false,
+        initialRoute: null, 
+        routes: {
+          'login': (BuildContext context) => LoginPage(),
+          'register': (BuildContext context) => RegisterPage(),
+          'roles': (BuildContext context) => RolesPage(),
+          'client/home':(BuildContext context) => ClientHomePage(),
+          'admin/home':(BuildContext context) => AdminHomePage(), 
+          'admin/category/create': (BuildContext context) => AdminCategoryCreatePage(),
+          'admin/category/update': (BuildContext context) => AdminCategoryUpdatePage(),
+          'admin/product/list': (BuildContext context) => AdminProductListPage(),
+          'admin/product/create': (BuildContext context) => AdminProductCreatePage(),
+          'admin/product/update': (BuildContext context) => AdminProductUpdatePage(),
+          'admin/order/detail': (BuildContext context) => AdminOrderDetailPage(), 
+          'admin/superAdmin': (BuildContext context) => SuperAdminPage(),     
+          'profile/info': (BuildContext context) => ProfileInfoPage(),
+          'profile/update': (BuildContext context) => ProfileUpdatePage(),
+          'client/product/list': (BuildContext context) => ClientProductListPage(),
+          'client/category/list': (BuildContext context) => ClientCategoryListPage(),
+          'client/product/detail': (BuildContext context) => ClientProductDetailPage(),
+          'client/shoppingBag': (BuildContext context) => ClientShoppingBagPage(),
+          'client/address/list': (BuildContext context) => ClientAddressListPage(),
+          'client/address/create': (BuildContext context) => ClientAddressCreatePage(),
+          'client/order/detail': (BuildContext context) => ClientOrderDetailPage(),        
+          'client/payment/success': (BuildContext context) => PaymentSuccessPage(),
+          'driver/home': (BuildContext context) => DriverHomePage(),
+          'driver/order/list': (BuildContext context) => DriverOrderListPage(),
+          'driver/order/detail': (BuildContext context) => DriverOrderDetailPage(),
 
-      }
+        },
+        home: _loading ? SplashScreen() : Container(), 
       ),
     );
   }
