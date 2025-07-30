@@ -103,7 +103,6 @@ class ClientAddressListBloc extends Bloc<ClientAddressListEvent, ClientAddressLi
 
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);
-      print('Stripe create response: $body'); 
       final url = body['checkout_url'];
       final sessionId = body['session_id']; 
 
@@ -126,13 +125,12 @@ class ClientAddressListBloc extends Bloc<ClientAddressListEvent, ClientAddressLi
     while (attempts < maxAttempts) {
       try {
         final verifyResponse = await http.get(
-          Uri.parse('https://${ApiConfig.NGROK_URL}/payment_stripe/success?session_id=$sessionId'),
+          Uri.parse('https://${ApiConfig.NGROK_URL}/payment_stripe/success?session_id=$sessionId&json=1'),
         );
         if (verifyResponse.statusCode == 200) {
           final data = jsonDecode(verifyResponse.body);
           print('Verificando pago: $data');
           if (data['payment_status'] == 'success') {
-            print('Pago exitoso, creando orden...');
             await _createOrderAfterPayment(emit);
             return;
           }
@@ -150,7 +148,6 @@ class ClientAddressListBloc extends Bloc<ClientAddressListEvent, ClientAddressLi
   }
   Future<void> _createOrderAfterPayment(Emitter<ClientAddressListState> emit) async {
     emit(state.copyWith(response: Loading()));
-
     try {
       final userSession = await authUseCases.getUserSession.run();
       final selectedAddress = await addressUseCase.getAddressSesionUseCase.run();
@@ -174,13 +171,10 @@ class ClientAddressListBloc extends Bloc<ClientAddressListEvent, ClientAddressLi
         orderHasProducts: null,
         productsToCreate: productsList, 
       );
-
       final response = await ordersUseCases.createOrder.run(order);
-      print('Orden creada: $response');
       emit(state.copyWith(response: response));
       
     } catch (e) {
-      print('Error creando la orden: $e');
       emit(state.copyWith(response: Error('Error creando la orden: $e')));
     }
   }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ecommerce_flutter/src/data/dataSource/local/sharedPref.dart';
+import 'package:ecommerce_flutter/src/domain/models/AuthResponse.dart';
 
 class PaymentSuccessPage extends StatefulWidget {
   const PaymentSuccessPage({super.key});
@@ -21,11 +23,27 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage>
   late Animation<double> _backgroundAnimation;
   late Animation<Color?> _colorAnimation;
 
+  AuthResponse? _authResponse;
+
   @override
   void initState() {
     super.initState();
+    _recoverSession();
     _setupAnimations();
     _startAnimations();
+  }
+
+  Future<void> _recoverSession() async {
+    final sharedPref = SharedPref();
+    final userSession = await sharedPref.read('user');
+    if (userSession != null) {
+      setState(() {
+        _authResponse = AuthResponse.fromJson(userSession);
+      });
+      print('Usuario recuperado en PaymentSuccessPage: ${_authResponse?.user.email}');
+    } else {
+      print('No hay sesión de usuario guardada');
+    }
   }
 
   void _setupAnimations() {
