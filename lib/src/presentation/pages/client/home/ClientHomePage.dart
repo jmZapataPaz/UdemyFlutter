@@ -30,14 +30,21 @@ class _ClientHomePageState extends State<ClientHomePage> {
     _bloc = BlocProvider.of<ClientHomeBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Menú de cliente'),
+        backgroundColor: Colors.black,
+        title: Text(
+          'Menú de cliente',
+          style: TextStyle(color: Colors.white),
+        ),
+        iconTheme: IconThemeData(color: Colors.white),
         actions: [
-          IconButton(onPressed: 
-            () {
-              Navigator.pushNamed(context, 'client/shoppingBag');
-            },
-          icon: Icon(Icons.shopping_bag,
-          color: Colors.black,)
+          IconButton(
+        onPressed: () {
+          Navigator.pushNamed(context, 'client/shoppingBag');
+        },
+        icon: Icon(
+          Icons.shopping_bag,
+          color: Colors.white,
+        ),
           )
         ],
       ),

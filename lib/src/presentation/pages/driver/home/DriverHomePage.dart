@@ -28,7 +28,12 @@ class _DriverHomePageState extends State<DriverHomePage> {
     _bloc = BlocProvider.of<DriverHomeBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Menú de conductor'),
+        backgroundColor: Colors.black,
+        title: Text(
+          'Menú de conductor',
+          style: TextStyle(color: Colors.white),
+        ),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       drawer: BlocBuilder<DriverHomeBloc, DriverHomeState>(
         builder: (context, state){

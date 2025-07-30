@@ -3,21 +3,27 @@ import 'package:ecommerce_flutter/src/presentation/pages/client/address/list/blo
 import 'package:ecommerce_flutter/src/presentation/pages/client/address/list/bloc/ClientAddressListEvent.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/address/list/bloc/ClientAddressListState.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class ClientAddressListItem extends StatelessWidget {
-  ClientAddressListBloc? bloc;
-  ClientAddressListState state; 
-  Address address;
-  int index;
+  final ClientAddressListBloc? bloc;
+  final ClientAddressListState state; 
+  final Address address;
+  final int index;
 
   ClientAddressListItem(this.bloc, this.state, this.address, this.index);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.width < 600;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: isSmall ? 0 : 40, vertical: isSmall ? 0 : 10),
+      child: Card(
+        elevation: isSmall ? 0 : 3,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(isSmall ? 0 : 16)),
+        child: ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: isSmall ? 16 : 32, vertical: isSmall ? 0 : 12),
           leading: Radio(
             value: index,
             groupValue: state.radioValue,
@@ -25,8 +31,7 @@ class ClientAddressListItem extends StatelessWidget {
               bloc?.add(ChangeRadioValue(
                 radioValue: value!,
                 address: address,
-                )
-              );
+              ));
             },
           ),
           trailing: IconButton(
@@ -37,20 +42,22 @@ class ClientAddressListItem extends StatelessWidget {
           ),
           title: Text(
             address.address,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: isSmall ? 16 : 22,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          subtitle: Text(
-            address.neighborhood,
-            style: const TextStyle(fontSize: 14),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                address.neighborhood,
+                style: TextStyle(fontSize: isSmall ? 14 : 18),
+              ),
+            ],
           ),
         ),
-        Divider(
-          color: Colors.grey,
-          height: 1,
-          indent: 30,
-          endIndent: 30,
-        ),
-      ],
+      ),
     );
   }
 }

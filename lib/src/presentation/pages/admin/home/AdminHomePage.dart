@@ -32,7 +32,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
     _bloc = BlocProvider.of<AdminHomeBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Menú de administración'),
+        backgroundColor: Colors.black,
+        title: Text(
+          'Menú de administración',
+          style: TextStyle(color: Colors.white),
+        ),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       drawer: BlocBuilder<AdminHomeBloc, AdminHomeState>(
         builder: (context, state) {
