@@ -75,14 +75,7 @@ class ProductService{
       if(response.statusCode == 200 || response.statusCode == 201){
         List<Product> products = List<Product>.from(data.map((x) => Product.fromJson(x)));
         
-        products.forEach((product) {
-          print('🖼️ ═══ PRODUCTO DESDE API ═══');
-          print('🆔 ID: ${product.id}');
-          print('🏷️ Nombre: ${product.name}');
-          print('🖼️ Image1: ${product.image1}');
-          print('🖼️ Image2: ${product.image2}');
-          print('═══════════════════════════');
-        });
+      
         
         return Success(products);
       }
@@ -91,7 +84,6 @@ class ProductService{
         return Error(errorMessage);
       }
     } catch (e) {
-      print('❌ Error al obtener productos: $e');
       return Error('Error de conexión: ${e.toString()}');
     }
   }
@@ -148,13 +140,7 @@ class ProductService{
         'Authorization': await token
       };
       
-      print('Eliminando producto ID: $id');
-      print('URL: $url');
-      
       final response = await http.delete(url, headers: headers); 
-      
-      print('Delete Status Code: ${response.statusCode}');
-      print('Delete Response Body: ${response.body}');
       
       if(response.statusCode == 200 || response.statusCode == 201 || response.statusCode == 204){
         return Success(true); 

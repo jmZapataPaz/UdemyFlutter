@@ -15,12 +15,14 @@ class ClientOrderDetailItem extends StatelessWidget {
     bool isTablet = screenWidth > 600;
     
     return Container(
+      
       margin: EdgeInsets.symmetric(
         horizontal: screenWidth * (isTablet ? 0.02 : 0.03),
         vertical: screenHeight * (isTablet ? 0.012 : 0.008),
       ),
       padding: EdgeInsets.all(screenWidth * (isTablet ? 0.03 : 0.02)),
       decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey[300]!),
       ),

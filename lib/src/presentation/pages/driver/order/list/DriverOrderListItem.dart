@@ -1,8 +1,11 @@
 import 'package:ecommerce_flutter/src/domain/models/Order.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/driver/order/list/bloc/DriverOrderListBloc.dart';
+import 'package:ecommerce_flutter/src/presentation/pages/driver/order/list/bloc/DriverOrderListEvent.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DriverOrderListItem extends StatelessWidget {
-  final Order order; 
+  final Order order;
   DriverOrderListItem(this.order);
 
   @override
@@ -11,8 +14,12 @@ class DriverOrderListItem extends StatelessWidget {
     final isSmall = size.width < 400;
 
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, 'driver/order/detail', arguments: order);
+      onTap: () async {
+        final result = await Navigator.pushNamed(context, 'driver/order/detail', arguments: order);
+        if (result == true) {
+          final bloc = BlocProvider.of<DriverOrderListBloc>(context);
+          bloc.add(GetOrders());
+        }
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: isSmall ? 8 : 32, vertical: isSmall ? 8 : 16),

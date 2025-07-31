@@ -21,6 +21,7 @@ class DriverOrderDetailItem extends StatelessWidget {
       ),
       padding: EdgeInsets.all(screenWidth * (isTablet ? 0.03 : 0.02)),
       decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey[300]!),
       ),

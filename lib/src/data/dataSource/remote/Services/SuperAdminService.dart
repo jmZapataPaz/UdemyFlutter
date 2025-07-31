@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:ecommerce_flutter/src/data/api/ApiConfig.dart';
+import 'package:ecommerce_flutter/src/data/api/HttpInterceptor.dart';
 import 'package:ecommerce_flutter/src/domain/models/Role.dart';
 import 'package:ecommerce_flutter/src/domain/models/User.dart';
 import 'package:ecommerce_flutter/src/domain/utils/Resource.dart';
-import 'package:http/http.dart' as http;
 
 class SuperAdminService {
+  final HttpInterceptor _httpInterceptor = HttpInterceptor();
   Future<String> token;
   SuperAdminService(this.token);
 
@@ -15,7 +16,7 @@ class SuperAdminService {
       'Content-Type': 'application/json',
       'Authorization': await token
     };
-    final response = await http.get(url, headers: headers);
+    final response = await _httpInterceptor.get(url, headers: headers); 
     if (response.statusCode == 200) {
       List<User> users = List<User>.from(json.decode(response.body).map((x) => User.fromJson(x)));
       return Success(users);
@@ -29,7 +30,7 @@ class SuperAdminService {
       'Content-Type': 'application/json',
       'Authorization': await token
     };
-    final response = await http.get(url, headers: headers);
+    final response = await _httpInterceptor.get(url, headers: headers); 
     if (response.statusCode == 200) {
       List<Role> roles = List<Role>.from(json.decode(response.body).map((x) => Role.fromJson(x)));
       return Success(roles);
@@ -43,11 +44,11 @@ class SuperAdminService {
       'Content-Type': 'application/json',
       'Authorization': await token
     };
-    final response = await http.post(
+    final response = await _httpInterceptor.post(
       url,
       headers: headers,
       body: json.encode({'id_rol': roleId.toUpperCase()}),
-    );
+    ); 
     if (response.statusCode == 200) {
       return Success(true);
     }
@@ -60,7 +61,7 @@ class SuperAdminService {
       'Content-Type': 'application/json',
       'Authorization': await token
     };
-    final response = await http.delete(url, headers: headers);
+    final response = await _httpInterceptor.delete(url, headers: headers); 
     if (response.statusCode == 200) {
       return Success(true);
     }
