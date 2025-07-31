@@ -26,16 +26,17 @@ class ProfileUpdateBloc extends Bloc<ProfileUpdateEvent, ProfileUpdateState>{
     on<ProfileUpdateTakePhoto>(_onTakePhoto);
     on<ProfileUpdateFormSubmitted>(_onFormSubmitted); 
     on<ProfileUpdateUpdateUserSession>(_onUpdateUserSession);
-
+    on<ProfileUpdateResetEvent>(_onProfileUpdateResetEvent);
   }
 
   Future<void> _onInitEvent(ProfileUpdateInitEvent event, Emitter<ProfileUpdateState> emit) async {
     emit(
       state.copyWith(
         id: event.user?.id,
-        name: BlocFormItem(value: event.user?.name ?? '') ,
+        name: BlocFormItem(value: event.user?.name ?? ''),
         lastname: BlocFormItem(value: event.user?.lastname ?? ''),
         phone: BlocFormItem(value: event.user?.phone ?? ''),
+        image: null,
         formKey: formKey
       )
     );
@@ -134,5 +135,9 @@ class ProfileUpdateBloc extends Bloc<ProfileUpdateEvent, ProfileUpdateState>{
     authResponse.user.image = event.user.image;
     await authUseCase.saveUserSession.run(authResponse);
     print('Usuario actualizado en la sesión: ${event.user.toJson()}');
+  }
+
+  Future<void> _onProfileUpdateResetEvent(ProfileUpdateResetEvent event, Emitter<ProfileUpdateState> emit) async {
+    emit(ProfileUpdateState()); 
   }
 }

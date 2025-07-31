@@ -228,7 +228,7 @@ class AdminProductCreateContent extends StatelessWidget {
               state.file1!, 
               fit: BoxFit.cover
             )
-            :Image.asset('assets/img/no-image.png', fit: BoxFit.cover,),
+            :Image.asset('assets/img/agregar.png', fit: BoxFit.cover,),
           ),
         ),
       ),
@@ -258,7 +258,7 @@ class AdminProductCreateContent extends StatelessWidget {
               state.file2!, 
               fit: BoxFit.cover
             )
-            :Image.asset('assets/img/no-image.png', fit: BoxFit.cover,),
+            :Image.asset('assets/img/agregar.png', fit: BoxFit.cover,),
           ),
         ),
       ),

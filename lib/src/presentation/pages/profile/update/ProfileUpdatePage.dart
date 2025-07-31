@@ -25,13 +25,11 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
   Widget build(BuildContext context) {
     _bloc = BlocProvider.of<ProfileUpdateBloc>(context);
     User? user = ModalRoute.of(context)?.settings.arguments as User?;
-    
-    // Inicializar solo una vez cuando el user esté disponible
-    if (!_initialized && user != null) {
+    if (user != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        _bloc?.add(ProfileUpdateResetEvent()); 
         _bloc?.add(ProfileUpdateInitEvent(user: user));
       });
-      _initialized = true;
     }
     
     return Scaffold(

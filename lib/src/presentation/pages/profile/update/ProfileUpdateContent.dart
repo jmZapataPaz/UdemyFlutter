@@ -85,7 +85,7 @@ class ProfileUpdateContent extends StatelessWidget {
                       fadeInDuration: Duration(seconds: 1),
                     )
                   : Image.asset(
-                      'assets/img/user_image.png',
+                      'assets/img/agregar.png',
                       fit: BoxFit.cover,
                     )
                 ),

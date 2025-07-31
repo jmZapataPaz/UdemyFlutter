@@ -39,15 +39,6 @@ class DriverOrderDetailBottom extends StatelessWidget {
         children: [
           _buildListTile(
             context,
-            icon: Icons.calendar_month,
-            title: 'Fecha del pedido',
-            subtitle: order?.createdAt != null
-                ? '${order!.createdAt.day.toString().padLeft(2, '0')}/${order!.createdAt.month.toString().padLeft(2, '0')}/${order!.createdAt.year}'
-                : '',
-            isTablet: isTablet,
-          ),
-          _buildListTile(
-            context,
             icon: Icons.person,
             title: 'Cliente',
             subtitle: '${order?.user?.name ?? ''} ${order?.user?.lastname ?? ''}',

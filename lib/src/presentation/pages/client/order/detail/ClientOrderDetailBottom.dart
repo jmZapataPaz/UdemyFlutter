@@ -43,20 +43,6 @@ class ClientOrderDetailBottom extends StatelessWidget {
           ),
           _buildListTile(
             context,
-            icon: Icons.person,
-            title: 'Cliente',
-            subtitle: '${order?.user?.name ?? ''} ${order?.user?.lastname ?? ''}',
-            isTablet: isTablet,
-          ),
-          _buildListTile(
-            context,
-            icon: Icons.phone,
-            title: 'Teléfono',
-            subtitle: order?.user?.phone ?? '',
-            isTablet: isTablet,
-          ),
-          _buildListTile(
-            context,
             icon: Icons.location_on,
             title: 'Dirección de entrega',
             subtitle: '${order?.address?.neighborhood ?? ''} ${order?.address?.address ?? ''}',

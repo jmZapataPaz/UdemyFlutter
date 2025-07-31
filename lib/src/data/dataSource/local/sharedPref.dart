@@ -13,7 +13,7 @@ class SharedPref {
     return json.decode(prefs.getString(key)!);
   }
 
-  Future<bool> remove(String key)async{
+  Future<bool> remove(String key) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.remove(key);
   }

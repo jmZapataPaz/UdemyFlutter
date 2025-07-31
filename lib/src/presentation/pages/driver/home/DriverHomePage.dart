@@ -1,3 +1,5 @@
+import 'package:ecommerce_flutter/injection.dart';
+import 'package:ecommerce_flutter/src/data/dataSource/local/sharedPref.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/driver/home/bloc/DriverHomeBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/driver/home/bloc/DriverHomeEvent.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/driver/home/bloc/DriverHomeState.dart';
@@ -218,6 +220,7 @@ class _DriverHomePageState extends State<DriverHomePage> {
                           );
                           if (shouldLogout == true) {
                             _bloc?.add(Logout());
+                            await locator<SharedPref>().remove('user');
                             Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
                           }
                         },

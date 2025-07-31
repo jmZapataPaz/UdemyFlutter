@@ -31,8 +31,8 @@ class _ClientOrderDetailPageState extends State<ClientOrderDetailPage> {
       body: Container(
         width: double.infinity,
         margin: EdgeInsets.symmetric(
-          horizontal: isTablet ? 0 : 32,
-          vertical: isTablet ? 0 : 24,
+          horizontal: isTablet ? 0 : 0,
+          vertical: isTablet ? 0 : 0,
         ),
         child: Card(
           elevation: isTablet ? 8 : 2,

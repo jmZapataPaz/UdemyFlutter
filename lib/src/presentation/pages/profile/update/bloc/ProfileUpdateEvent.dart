@@ -64,3 +64,5 @@ class ProfileUpdateUpdateUserSession extends ProfileUpdateEvent {
   @override
   List<Object?> get props => [user];
 }
+
+class ProfileUpdateResetEvent extends ProfileUpdateEvent {}

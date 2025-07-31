@@ -38,8 +38,8 @@ class _AdminOrderDetailPageState extends State<AdminOrderDetailPage> {
             maxWidth: isTablet ? double.infinity : 700,
           ),
           margin: EdgeInsets.symmetric(
-            horizontal: isTablet ? 0 : 32,
-            vertical: isTablet ? 0 : 24,
+            horizontal: isTablet ? 0 : 0,
+            vertical: isTablet ? 0 : 0,
           ),
           child: Card(
             elevation: isTablet ? 8 : 2,

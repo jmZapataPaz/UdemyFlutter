@@ -197,7 +197,7 @@ class AdminCategoryCreateContent extends StatelessWidget {
               state.file!, 
               fit: BoxFit.cover
             )
-            :Image.asset('assets/img/no-image.png', fit: BoxFit.cover,),
+            :Image.asset('assets/img/agregar.png', fit: BoxFit.cover,),
           ),
         ),
       ),
