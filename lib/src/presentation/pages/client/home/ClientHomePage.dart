@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:ecommerce_flutter/src/presentation/pages/client/category/list/ClientCategoryListPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/home/bloc/ClientHomeBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/client/home/bloc/ClientHomeEvent.dart';
@@ -45,7 +46,7 @@ class _ClientHomePageState extends State<ClientHomePage> {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(true);
-                  Navigator.of(context).maybePop();
+                  exit(0); 
                 },
                 child: Text('Sí'),
               ),

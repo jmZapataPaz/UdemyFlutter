@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:ecommerce_flutter/injection.dart';
 import 'package:ecommerce_flutter/src/data/dataSource/local/sharedPref.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/driver/home/bloc/DriverHomeBloc.dart';
@@ -45,7 +46,7 @@ class _DriverHomePageState extends State<DriverHomePage> {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(true);
-                  Navigator.of(context).maybePop();
+                  exit(0); 
                 },
                 child: Text('Sí'),
               ),
@@ -214,6 +215,7 @@ class _DriverHomePageState extends State<DriverHomePage> {
                                 TextButton(
                                   child: Text('Sí'),
                                   onPressed: () => Navigator.of(context).pop(true),
+                                  
                                 ),
                               ],
                             ),

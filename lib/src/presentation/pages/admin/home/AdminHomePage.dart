@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/category/list/AdminCategoryListPage.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/home/bloc/AdminHomeBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/admin/home/bloc/AdminHomeEvent.dart';
@@ -23,8 +24,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
     SuperAdminPage(),
     AdminCategoryListPage(),
     AdminOrderListPage(),
-    RolesPage(),
     ProfileInfoPage(),
+    RolesPage(),
   ];
 
   @override
@@ -47,7 +48,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(true);
-                  Navigator.of(context).maybePop();
+                  exit(0); 
                 },
                 child: Text('Sí'),
               ),
@@ -114,7 +115,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         ),
                       ),
                     ),
-                    
                     SizedBox(height: MediaQuery.of(context).size.height * 0.015), 
                     _buildDrawerItem(
                       context: context,
@@ -150,18 +150,17 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     _buildDrawerItem(
                       context: context,
                       icon: Icons.admin_panel_settings,
-                      title: 'Roles',
+                      title: 'Perfil',
                       isSelected: state.pageIndex == 3,
                       onTap: () {
                         _bloc?.add(AdminChangeDrawerPage(pageIndex: 3));
                         Navigator.pop(context);
                       },
                     ),
-                    
                     _buildDrawerItem(
                       context: context,
                       icon: Icons.person,
-                      title: 'Perfil',
+                      title: 'Cambiar Rol',
                       isSelected: state.pageIndex == 4,
                       onTap: () {
                         _bloc?.add(AdminChangeDrawerPage(pageIndex: 4));

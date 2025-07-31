@@ -78,11 +78,10 @@ class _ClientShoppingBagPageState extends State<ClientShoppingBagPage> {
       ),
       bottomNavigationBar: BlocBuilder<ClientShoppingBagBloc, ClientShoppingBagState>(
         builder: (context, state) {
-          // CORREGIR: Mostrar directamente el BottomBar, no en ListView
           if (state.products.isNotEmpty) {
             return ClientShoppingBagBottomBar(state);
           }
-          return SizedBox.shrink(); // No mostrar nada si no hay productos
+          return SizedBox.shrink(); 
         },
       ),
     );

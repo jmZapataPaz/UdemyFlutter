@@ -11,6 +11,7 @@ class ClientCategorylistitem extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmall = size.width < 400;
+    final double categoryHeight = isSmall ? 180 : 260; 
 
     return GestureDetector(
       onTap: () {
@@ -21,7 +22,7 @@ class ClientCategorylistitem extends StatelessWidget {
           horizontal: isSmall ? 8 : 16,
           vertical: isSmall ? 6 : 10,
         ),
-        height: isSmall ? 120 : 180,
+        height: categoryHeight, 
         child: Stack(
           children: [
             ClipRRect(
@@ -30,18 +31,18 @@ class ClientCategorylistitem extends StatelessWidget {
                   ? Image.network(
                       category!.image!,
                       width: double.infinity,
-                      height: isSmall ? 120 : 180,
+                      height: categoryHeight, 
                       fit: BoxFit.cover,
                     )
                   : Image.asset(
                       'assets/img/user_image.png',
                       width: double.infinity,
-                      height: isSmall ? 120 : 180,
+                      height: categoryHeight, 
                       fit: BoxFit.cover,
                     ),
             ),
             Container(
-              height: isSmall ? 120 : 180,
+              height: categoryHeight, 
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(isSmall ? 12 : 20),
                 color: Colors.black.withOpacity(0.45),
