@@ -157,7 +157,7 @@ class _DriverOrderListPageState extends State<DriverOrderListPage> {
                   onSelected: (selected) {
                     _bloc?.add(FilterByStatus(status: status));
                   },
-                  selectedColor: Colors.blue[600],
+                  selectedColor: Colors.black,
                   backgroundColor: Colors.grey[200],
                   checkmarkColor: Colors.white,
                   elevation: isSelected ? 4 : 2,
@@ -165,7 +165,7 @@ class _DriverOrderListPageState extends State<DriverOrderListPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                     side: BorderSide(
-                      color: isSelected ? Colors.blue[600]! : Colors.grey[300]!,
+                      color: isSelected ? Colors.black! : Colors.grey[300]!,
                       width: 1,
                     ),
                   ),

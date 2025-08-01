@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:ecommerce_flutter/injection.dart';
 import 'package:ecommerce_flutter/src/data/dataSource/local/sharedPref.dart';
+import 'package:ecommerce_flutter/src/domain/models/User.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/driver/home/bloc/DriverHomeBloc.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/driver/home/bloc/DriverHomeEvent.dart';
 import 'package:ecommerce_flutter/src/presentation/pages/driver/home/bloc/DriverHomeState.dart';
@@ -18,8 +19,25 @@ class DriverHomePage extends StatefulWidget {
 }
 
 class _DriverHomePageState extends State<DriverHomePage> {
-
   DriverHomeBloc? _bloc;
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUser();
+  }
+
+  Future<void> _loadUser() async {
+    final sharedPref = SharedPref();
+    final userSession = await sharedPref.read('user');
+    if (userSession != null && mounted) {
+      setState(() {
+        _user = User.fromJson(userSession['user']);
+      });
+    }
+  }
+
   List<Widget> pageList = <Widget>[
     DriverOrderListPage(),
     ProfileInfoPage(),
@@ -46,7 +64,7 @@ class _DriverHomePageState extends State<DriverHomePage> {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(true);
-                  exit(0); 
+                  exit(0);
                 },
                 child: Text('Sí'),
               ),
@@ -64,7 +82,7 @@ class _DriverHomePageState extends State<DriverHomePage> {
           iconTheme: IconThemeData(color: Colors.white),
         ),
         drawer: BlocBuilder<DriverHomeBloc, DriverHomeState>(
-          builder: (context, state){
+          builder: (context, state) {
             return Drawer(
               child: Container(
                 decoration: BoxDecoration(
@@ -100,20 +118,38 @@ class _DriverHomePageState extends State<DriverHomePage> {
                         ],
                       ),
                       child: Center(
-                        child: Text(
-                          'Menú de Conductor',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: MediaQuery.of(context).size.width > 600 
-                              ? MediaQuery.of(context).size.width * 0.03  
-                              : MediaQuery.of(context).size.width * 0.05, 
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.2,
-                          ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Menú de Conductor',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: MediaQuery.of(context).size.width > 600
+                                    ? MediaQuery.of(context).size.width * 0.03
+                                    : MediaQuery.of(context).size.width * 0.05,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              '${_user?.name ?? 'Conductor'} ${_user?.lastname ?? ''}',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: MediaQuery.of(context).size.width > 600
+                                    ? MediaQuery.of(context).size.width * 0.018
+                                    : MediaQuery.of(context).size.width * 0.035,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.015), 
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.015),
                     _buildDrawerItem(
                       context: context,
                       icon: Icons.shopping_cart_checkout,
@@ -144,7 +180,7 @@ class _DriverHomePageState extends State<DriverHomePage> {
                         Navigator.pop(context);
                       },
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.03), 
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                     Container(
                       margin: EdgeInsets.symmetric(
                         horizontal: MediaQuery.of(context).size.width * 0.08,
@@ -160,7 +196,7 @@ class _DriverHomePageState extends State<DriverHomePage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.015), 
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.015),
                     Container(
                       margin: EdgeInsets.symmetric(
                         horizontal: MediaQuery.of(context).size.width * 0.05,
@@ -182,18 +218,18 @@ class _DriverHomePageState extends State<DriverHomePage> {
                         leading: Icon(
                           Icons.logout,
                           color: Colors.white,
-                          size: MediaQuery.of(context).size.width > 600 
-                            ? MediaQuery.of(context).size.width * 0.04
-                            : MediaQuery.of(context).size.width * 0.06,
+                          size: MediaQuery.of(context).size.width > 600
+                              ? MediaQuery.of(context).size.width * 0.04
+                              : MediaQuery.of(context).size.width * 0.06,
                         ),
                         title: Text(
                           'Cerrar Sesión',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
-                            fontSize: MediaQuery.of(context).size.width > 600 
-                              ? MediaQuery.of(context).size.width * 0.025
-                              : MediaQuery.of(context).size.width * 0.04,  
+                            fontSize: MediaQuery.of(context).size.width > 600
+                                ? MediaQuery.of(context).size.width * 0.025
+                                : MediaQuery.of(context).size.width * 0.04,
                           ),
                         ),
                         onTap: () async {
@@ -203,8 +239,11 @@ class _DriverHomePageState extends State<DriverHomePage> {
                             context: context,
                             builder: (context) => AlertDialog(
                               insetPadding: isTablet
-                                ? EdgeInsets.symmetric(horizontal: screenWidth * 0.25, vertical: 24)
-                                : EdgeInsets.symmetric(horizontal: 40, vertical: 24),
+                                  ? EdgeInsets.symmetric(
+                                      horizontal: screenWidth * 0.25,
+                                      vertical: 24)
+                                  : EdgeInsets.symmetric(
+                                      horizontal: 40, vertical: 24),
                               title: Text('Cerrar sesión'),
                               content: Text('¿Estás seguro que deseas cerrar sesión?'),
                               actions: [
@@ -215,7 +254,6 @@ class _DriverHomePageState extends State<DriverHomePage> {
                                 TextButton(
                                   child: Text('Sí'),
                                   onPressed: () => Navigator.of(context).pop(true),
-                                  
                                 ),
                               ],
                             ),
@@ -223,7 +261,8 @@ class _DriverHomePageState extends State<DriverHomePage> {
                           if (shouldLogout == true) {
                             _bloc?.add(Logout());
                             await locator<SharedPref>().remove('user');
-                            Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, 'login', (route) => false);
                           }
                         },
                         shape: RoundedRectangleBorder(
@@ -231,17 +270,17 @@ class _DriverHomePageState extends State<DriverHomePage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.02), 
-                  ]
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                  ],
                 ),
               ),
             );
-          }
+          },
         ),
         body: BlocBuilder<DriverHomeBloc, DriverHomeState>(
           builder: (context, state) {
             return pageList[state.pageIndex];
-          }
+          },
         ),
       ),
     );
@@ -260,7 +299,7 @@ class _DriverHomePageState extends State<DriverHomePage> {
     return Container(
       margin: EdgeInsets.symmetric(
         vertical: screenHeight * 0.005,
-        horizontal: screenWidth * (isTablet ? 0.03 : 0.05), 
+        horizontal: screenWidth * (isTablet ? 0.03 : 0.05),
       ),
       decoration: BoxDecoration(
         color: isSelected ? Colors.grey[850] : Colors.transparent,
@@ -276,8 +315,8 @@ class _DriverHomePageState extends State<DriverHomePage> {
       ),
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(
-          horizontal: screenWidth * (isTablet ? 0.04 : 0.03), 
-          vertical: screenHeight * (isTablet ? 0.015 : 0.01), 
+          horizontal: screenWidth * (isTablet ? 0.04 : 0.03),
+          vertical: screenHeight * (isTablet ? 0.015 : 0.01),
         ),
         leading: Icon(
           icon,
@@ -289,11 +328,11 @@ class _DriverHomePageState extends State<DriverHomePage> {
           style: TextStyle(
             color: isSelected ? Colors.white : Colors.grey[400],
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            fontSize: screenWidth * (isTablet ? 0.025 : 0.04), 
-            letterSpacing: isTablet ? 0.5 : 0, 
+            fontSize: screenWidth * (isTablet ? 0.025 : 0.04),
+            letterSpacing: isTablet ? 0.5 : 0,
           ),
-          overflow: TextOverflow.ellipsis, 
-          maxLines: 1, 
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
         ),
         onTap: onTap,
       ),

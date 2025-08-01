@@ -15,7 +15,7 @@ class AdminOrderListItem extends StatelessWidget {
         Navigator.pushNamed(context, 'admin/order/detail', arguments: order);
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: isSmall ? 8 : 32, vertical: isSmall ? 8 : 16),
+        margin: EdgeInsets.symmetric(horizontal: isSmall ? 8 : 16, vertical: isSmall ? 8 : 8),
         child: Card(
           elevation: 4,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(isSmall ? 10 : 20)),

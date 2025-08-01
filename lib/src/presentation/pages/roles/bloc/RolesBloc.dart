@@ -12,7 +12,6 @@ class RolesBloc extends Bloc<RolesEvent, RolesState>{
     on<GetRolesList>(_onGetRolesList);
   }
 
-  //con esto emitimos la lista de roles
   Future<void> _onGetRolesList(GetRolesList event, Emitter<RolesState> emit) async {
     AuthResponse? authResponse = await authUseCases.getUserSession.run();
     emit(

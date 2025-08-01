@@ -9,6 +9,8 @@ import 'package:ecommerce_flutter/src/presentation/pages/profile/info/ProfileInf
 import 'package:ecommerce_flutter/src/presentation/pages/roles/RolesPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ecommerce_flutter/src/data/dataSource/local/sharedPref.dart';
+import 'package:ecommerce_flutter/src/domain/models/User.dart';
 
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({super.key});
@@ -18,8 +20,25 @@ class AdminHomePage extends StatefulWidget {
 }
 
 class _AdminHomePageState extends State<AdminHomePage> {
-
   AdminHomeBloc? _bloc;
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUser();
+  }
+
+  Future<void> _loadUser() async {
+    final sharedPref = SharedPref();
+    final userSession = await sharedPref.read('user');
+    if (userSession != null && mounted) {
+      setState(() {
+        _user = User.fromJson(userSession['user']);
+      });
+    }
+  }
+
   List<Widget> pageList = <Widget>[
     SuperAdminPage(),
     AdminCategoryListPage(),
@@ -102,16 +121,34 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         ],
                       ),
                       child: Center(
-                        child: Text(
-                          'Menú de Administración',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: MediaQuery.of(context).size.width > 600 
-                              ? MediaQuery.of(context).size.width * 0.03  
-                              : MediaQuery.of(context).size.width * 0.05, 
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.2,
-                          ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Menú de Administración',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: MediaQuery.of(context).size.width > 600 
+                                  ? MediaQuery.of(context).size.width * 0.03  
+                                  : MediaQuery.of(context).size.width * 0.05, 
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                                '${_user?.name ?? 'Usuario'} ${_user?.lastname ?? ''}',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: MediaQuery.of(context).size.width > 600 
+                                  ? MediaQuery.of(context).size.width * 0.018
+                                  : MediaQuery.of(context).size.width * 0.035,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ],
                         ),
                       ),
                     ),

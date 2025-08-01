@@ -77,45 +77,76 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
             }
           }
         },
-        
         child: BlocBuilder<ClientAddressListBloc, ClientAddressListState>(
-          builder: (context, state){
+          builder: (context, state) {
             final responseState = state.response;
             bool hasAddresses = false;
             List<Address> addressList = [];
+
+            if (responseState is Loading) {
+              return Expanded(
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.deepOrange,
+                  ),
+                ),
+              );
+            }
             if (responseState is Success && responseState.data is List<Address>) {
               addressList = responseState.data as List<Address>;
               hasAddresses = addressList.isNotEmpty;
               _bloc?.add(SetAddressSession(addressList: addressList));
             }
+            if (responseState is Error) {
+              return Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.location_off, size: 64, color: Colors.grey),
+                      SizedBox(height: 16),
+                      Text(
+                        'No tienes direcciones guardadas',
+                        style: TextStyle(fontSize: 18, color: Colors.grey, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Agrega una dirección para continuar',
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
             return Column(
               children: [
                 Expanded(
                   child: hasAddresses
-                    ? ListView.builder(
-                        itemCount: addressList.length,
-                        itemBuilder: (context, index) {
-                          return ClientAddressListItem(_bloc, state, addressList[index], index);
-                        },
-                      )
-                    : Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.location_off, size: 64, color: Colors.grey),
-                            SizedBox(height: 16),
-                            Text(
-                              'No tienes direcciones guardadas',
-                              style: TextStyle(fontSize: 18, color: Colors.grey, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Agrega una dirección para continuar',
-                              style: TextStyle(fontSize: 14, color: Colors.grey),
-                            ),
-                          ],
+                      ? ListView.builder(
+                          itemCount: addressList.length,
+                          itemBuilder: (context, index) {
+                            return ClientAddressListItem(_bloc, state, addressList[index], index);
+                          },
+                        )
+                      : Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.location_off, size: 64, color: Colors.grey),
+                              SizedBox(height: 16),
+                              Text(
+                                'No tienes direcciones guardadas',
+                                style: TextStyle(fontSize: 18, color: Colors.grey, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                'Agrega una dirección para continuar',
+                                style: TextStyle(fontSize: 14, color: Colors.grey),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -123,11 +154,11 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: hasAddresses
-                        ? () {
-                            _bloc?.add(OnPaymentStripeSubmit());
-                          }
-                        : null, 
+                      onPressed: hasAddresses && responseState is! Loading
+                          ? () {
+                              _bloc?.add(OnPaymentStripeSubmit());
+                            }
+                          : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.deepOrange,
                         shape: RoundedRectangleBorder(
@@ -135,14 +166,23 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
                         ),
                         elevation: 5,
                       ),
-                      child: const Text(
-                        'Pagar',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: responseState is Loading
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text(
+                              'Pagar',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
                   ),
                 ),

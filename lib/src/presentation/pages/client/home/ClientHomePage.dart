@@ -8,6 +8,8 @@ import 'package:ecommerce_flutter/src/presentation/pages/profile/info/ProfileInf
 import 'package:ecommerce_flutter/src/presentation/pages/roles/RolesPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ecommerce_flutter/src/data/dataSource/local/sharedPref.dart';
+import 'package:ecommerce_flutter/src/domain/models/User.dart';
 
 class ClientHomePage extends StatefulWidget {
   const ClientHomePage({super.key});
@@ -17,14 +19,31 @@ class ClientHomePage extends StatefulWidget {
 }
 
 class _ClientHomePageState extends State<ClientHomePage> {
-
   ClientHomeBloc? _bloc;
+  User? _user;
+
   List<Widget> pageList = <Widget>[
     ClientCategoryListPage(),
     ClientOrderListPage(),
     ProfileInfoPage(),
     RolesPage(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUser();
+  }
+
+  Future<void> _loadUser() async {
+    final sharedPref = SharedPref();
+    final userSession = await sharedPref.read('user');
+    if (userSession != null && mounted) {
+      setState(() {
+        _user = User.fromJson(userSession['user']);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,16 +130,34 @@ class _ClientHomePageState extends State<ClientHomePage> {
                         ],
                       ),
                       child: Center(
-                        child: Text(
-                          'Menú de Cliente',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: MediaQuery.of(context).size.width > 600 
-                              ? MediaQuery.of(context).size.width * 0.03  
-                              : MediaQuery.of(context).size.width * 0.05, 
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.2,
-                          ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Menú de Cliente',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: MediaQuery.of(context).size.width > 600 
+                                  ? MediaQuery.of(context).size.width * 0.03  
+                                  : MediaQuery.of(context).size.width * 0.05, 
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              '${_user?.name ?? 'Usuario'} ${_user?.lastname ?? ''}',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: MediaQuery.of(context).size.width > 600 
+                                  ? MediaQuery.of(context).size.width * 0.018
+                                  : MediaQuery.of(context).size.width * 0.035,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ],
                         ),
                       ),
                     ),
